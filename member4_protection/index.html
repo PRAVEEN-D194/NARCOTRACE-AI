@@ -1,0 +1,1147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NARCO-TRACE | Member 4: Risk, Cell & Protection</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-base: #0a0b10;
+            --bg-surface: rgba(18, 20, 30, 0.7);
+            --bg-card: rgba(26, 29, 45, 0.5);
+            --border-glow: rgba(0, 242, 254, 0.15);
+            --text-primary: #f1f3f9;
+            --text-secondary: #9aa0b9;
+            --primary: #00f2fe;
+            --primary-glow: rgba(0, 242, 254, 0.4);
+            --secondary: #4facfe;
+            --accent: #f35588;
+            --success: #00e676;
+            --warning: #ffb300;
+            --danger: #ff1744;
+            --glass-blur: blur(16px);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: radial-gradient(circle at 50% 0%, #151a30 0%, var(--bg-base) 70%);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        h1, h2, h3, .brand {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        /* Glassmorphism utility */
+        .glass {
+            background: var(--bg-surface);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 40px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .brand-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .brand-logo {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 20px;
+            color: #000;
+            box-shadow: 0 0 20px var(--primary-glow);
+        }
+
+        .brand-title {
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            background: linear-gradient(to right, #fff, var(--text-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .user-status {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .role-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .role-badge.investigator {
+            background: rgba(79, 172, 254, 0.15);
+            color: var(--secondary);
+            border: 1px solid rgba(79, 172, 254, 0.3);
+        }
+
+        .role-badge.senior {
+            background: rgba(243, 85, 136, 0.15);
+            color: var(--accent);
+            border: 1px solid rgba(243, 85, 136, 0.3);
+        }
+
+        .btn {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px var(--primary-glow);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--text-primary);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .btn-outline:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: var(--primary);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, var(--danger), #ff5252);
+            color: white;
+        }
+
+        .main-container {
+            display: flex;
+            flex: 1;
+            padding: 30px;
+            gap: 30px;
+        }
+
+        /* Sidebar navigation */
+        .sidebar {
+            width: 280px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding: 20px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 14px 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 500;
+            color: var(--text-secondary);
+            transition: all 0.3s ease;
+        }
+
+        .nav-item:hover, .nav-item.active {
+            color: var(--text-primary);
+            background: rgba(255, 255, 255, 0.05);
+            border-left: 4px solid var(--primary);
+        }
+
+        .content-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        /* Card components */
+        .card {
+            background: var(--bg-card);
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            border-radius: 16px;
+            padding: 24px;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            border-color: var(--border-glow);
+        }
+
+        .card-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--primary);
+        }
+
+        /* Login view */
+        .login-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(10, 11, 16, 0.9);
+            backdrop-filter: blur(20px);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .login-card {
+            width: 450px;
+            padding: 40px;
+            text-align: center;
+            border: 1px solid rgba(0, 242, 254, 0.2);
+            box-shadow: 0 10px 40px rgba(0, 242, 254, 0.08);
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .input-control {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 12px 16px;
+            border-radius: 8px;
+            color: white;
+            font-family: inherit;
+            transition: all 0.3s ease;
+        }
+
+        .input-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 10px rgba(0, 242, 254, 0.2);
+        }
+
+        /* SHAP Force Plot CSS Visualization */
+        .shap-plot {
+            margin-top: 25px;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .shap-bar-container {
+            display: flex;
+            height: 35px;
+            border-radius: 8px;
+            overflow: hidden;
+            margin: 20px 0;
+            background: #222;
+            position: relative;
+        }
+
+        .shap-segment {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 700;
+            color: #000;
+            transition: width 0.5s ease;
+        }
+
+        /* Grid layouts */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        /* Badges & Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 14px 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        th {
+            color: var(--text-secondary);
+            font-weight: 600;
+            font-size: 14px;
+            text-transform: uppercase;
+        }
+
+        tr:hover td {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        /* Masked value overlay text */
+        .masked-text {
+            background: linear-gradient(90deg, #ff1744, #ff5252);
+            color: white;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 12px;
+            letter-spacing: 0.5px;
+            display: inline-block;
+        }
+
+        .provenance-tag {
+            font-family: monospace;
+            background: rgba(0, 242, 254, 0.1);
+            color: var(--primary);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 13px;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Login Overlay -->
+    <div id="loginOverlay" class="login-overlay">
+        <div class="login-card glass">
+            <div class="brand-logo" style="margin: 0 auto 20px;">NT</div>
+            <h2 style="margin-bottom: 10px;">NARCO-TRACE AI</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 30px;">Member 4 Secure Gateway</p>
+            <div class="input-group">
+                <label>Select Profile Demo Credentials</label>
+                <select id="loginPresets" class="input-control" onchange="applyPreset()">
+                    <option value="">-- Choose Profile --</option>
+                    <option value="investigator1">Investigator (Inspector Naveen)</option>
+                    <option value="senior_analyst1">Senior Analyst (Superintendent Sharma)</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label>Username</label>
+                <input type="text" id="username" class="input-control" placeholder="username">
+            </div>
+            <div class="input-group">
+                <label>Password</label>
+                <input type="password" id="password" class="input-control" placeholder="password">
+            </div>
+            <button class="btn" style="width: 100%; margin-top: 10px;" onclick="handleLogin()">Authenticate System</button>
+        </div>
+    </div>
+
+    <!-- Main App Header -->
+    <header class="glass">
+        <div class="brand-container">
+            <div class="brand-logo">NT</div>
+            <div>
+                <span class="brand-title">NARCO-TRACE AI</span>
+                <div style="font-size: 11px; color: var(--primary); letter-spacing: 1px;">MEMBER 4: RISK & PROTECTION CELL</div>
+            </div>
+        </div>
+        <div class="user-status" id="headerUserStatus" style="display: none;">
+            <span id="userNameDisplay" style="font-weight: 500;">User Name</span>
+            <span id="userRoleBadge" class="role-badge">ROLE</span>
+            <button class="btn btn-outline" style="padding: 6px 12px; font-size: 13px;" onclick="logout()">Logout</button>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <!-- Sidebar -->
+        <div class="sidebar glass">
+            <div class="nav-item active" onclick="switchTab('risk-tab', this)">
+                <span style="font-size: 18px;">🔥</span> Risk Scoring & XAI
+            </div>
+            <div class="nav-item" onclick="switchTab('cell-tab', this)">
+                <span style="font-size: 18px;">🛡️</span> Intelligence Cell
+            </div>
+            <div class="nav-item" onclick="switchTab('firewall-tab', this)">
+                <span style="font-size: 18px;">🚧</span> Intelligence Firewall
+            </div>
+            <div class="nav-item" onclick="switchTab('audit-tab', this)">
+                <span style="font-size: 18px;">📜</span> Audit & Compliance
+            </div>
+        </div>
+
+        <!-- Content Area -->
+        <div class="content-area">
+            
+            <!-- Risk tab -->
+            <div id="risk-tab" class="tab-content active">
+                <div class="card">
+                    <div class="card-title">Explainable Risk Engine (XAI / SHAP Simulator)</div>
+                    <p style="color: var(--text-secondary); margin-bottom: 25px;">
+                        Adjust target risk metrics below. The engine calculates an overall priority score and builds a SHAP (SHapley Additive exPlanations) force layout to justify the risk priority.
+                    </p>
+                    <div class="grid-2">
+                        <div>
+                            <div class="input-group">
+                                <label>Drug Activity Incidents Count (0 - 15)</label>
+                                <input type="range" id="metric_activity" class="input-control" min="0" max="15" value="8" oninput="runRiskEngine()">
+                            </div>
+                            <div class="input-group">
+                                <label>Cross-Platform Identity Links (0 - 5)</label>
+                                <input type="range" id="metric_links" class="input-control" min="0" max="5" value="3" oninput="runRiskEngine()">
+                            </div>
+                            <div class="input-group">
+                                <label>Network Centrality Importance (0.0 - 1.0)</label>
+                                <input type="range" id="metric_centrality" class="input-control" min="0" max="100" value="65" oninput="runRiskEngine()">
+                            </div>
+                        </div>
+                        <div>
+                            <div class="input-group">
+                                <label>Financial Association Wallet Volume ($0 - $5000)</label>
+                                <input type="range" id="metric_financial" class="input-control" min="0" max="5000" value="1200" step="100" oninput="runRiskEngine()">
+                            </div>
+                            <div class="input-group">
+                                <label>Historical Criminal Cases Linked (0 - 5)</label>
+                                <input type="range" id="metric_history" class="input-control" min="0" max="5" value="2" oninput="runRiskEngine()">
+                            </div>
+                            <div class="input-group">
+                                <label>Duration of Active Online Footprint (Days)</label>
+                                <input type="range" id="metric_active" class="input-control" min="0" max="365" value="120" oninput="runRiskEngine()">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="shap-plot">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                            <h3 style="font-size: 18px;">Priority Risk Score: <span id="riskScoreVal" style="color: var(--accent); font-size: 24px;">--</span></h3>
+                            <span id="riskClassBadge" class="role-badge" style="background: rgba(255, 179, 0, 0.2); color: var(--warning); border: 1px solid var(--warning)">HIGH</span>
+                        </div>
+                        
+                        <label style="font-size: 13px; color: var(--text-secondary);">SHAP Contribution Distribution:</label>
+                        <div class="shap-bar-container" id="shapBar">
+                            <!-- JS populated SHAP bars -->
+                        </div>
+
+                        <div id="shapBreakdownList" style="margin-top: 15px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                            <!-- Legend -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cell tab -->
+            <div id="cell-tab" class="tab-content">
+                <div class="card" style="margin-bottom: 30px;">
+                    <div class="card-title">Intelligence Cell - Package Compiler</div>
+                    <div style="margin-bottom: 20px;">
+                        <p style="color: var(--text-secondary); margin-bottom: 15px;">Compile validated packages from raw dark-web/crypto feeds (Member 1/2 outputs).</p>
+                        <div class="input-group">
+                            <label>New Package ID</label>
+                            <input type="text" id="newPkgId" class="input-control" value="PKG-042" style="max-width: 200px;">
+                        </div>
+                        <div class="input-group">
+                            <label>Select Raw Source Intelligence Report(s)</label>
+                            <div style="background: rgba(0,0,0,0.2); padding: 10px; border-radius: 8px;" id="rawReportsCheckboxList">
+                                <!-- JS populated raw reports list -->
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label>Compiled Summary (Sanitized for Investigators)</label>
+                            <textarea id="compiledSummary" class="input-control" rows="3">Evidence coordinates target 'DarkWolf23' alias matching Telegram bot 'Wolf_23'. Tracked high-volume transaction activity in Sector 17.</textarea>
+                        </div>
+                        <div class="input-group">
+                            <label>Confidence Rating (0.0 - 1.0)</label>
+                            <input type="number" id="confidenceRating" class="input-control" min="0" max="1" step="0.05" value="0.95" style="max-width: 200px;">
+                        </div>
+                        <button class="btn" onclick="compilePackage()">Compile and Hash Package</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">Packages Awaiting Review / Verification</div>
+                    <div class="table-responsive">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Package ID</th>
+                                    <th>Summary</th>
+                                    <th>Confidence</th>
+                                    <th>SHA-256 Provenance</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="packageReviewList">
+                                <!-- Populated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Firewall tab -->
+            <div id="firewall-tab" class="tab-content">
+                <div class="grid-2">
+                    <div class="card">
+                        <div class="card-title">Investigator Case Workspace (Firewall Active)</div>
+                        <p style="color: var(--text-secondary); margin-bottom: 20px;">
+                            Viewing package <strong>PKG-041</strong>. Notice how the firewall has automatically masked raw dark-web URLs and direct chat details.
+                        </p>
+                        <div style="display: flex; flex-direction: column; gap: 15px;">
+                            <div>
+                                <label style="font-size: 13px; color: var(--text-secondary);">Subject / Alias:</label>
+                                <div style="font-size: 16px; font-weight: 600; margin-top: 4px;">DarkWolf23 (Wolf_23)</div>
+                            </div>
+                            <div>
+                                <label style="font-size: 13px; color: var(--text-secondary);">Controlled Intelligence Summary:</label>
+                                <div style="font-size: 14px; margin-top: 4px; line-height: 1.5;" id="firewallSummary">--</div>
+                            </div>
+                            <div>
+                                <label style="font-size: 13px; color: var(--text-secondary);">Verify Digital Provenance SHA-256:</label>
+                                <div style="margin-top: 4px;"><span class="provenance-tag" id="firewallSha">--</span></div>
+                            </div>
+                            <div>
+                                <label style="font-size: 13px; color: var(--text-secondary);">Protected Source Details:</label>
+                                <div style="margin-top: 4px;" id="firewallSourceDetails">
+                                    <span class="masked-text">PROTECTED SOURCE</span>
+                                </div>
+                            </div>
+                            <div>
+                                <label style="font-size: 13px; color: var(--text-secondary);">Protected Analyst Notes:</label>
+                                <div style="margin-top: 4px;" id="firewallAnalystNotes">
+                                    <span class="masked-text">PROTECTED SOURCE</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="overrideSection" style="margin-top: 25px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.05);">
+                            <h4>Request Firewall Override (Senior Authorization)</h4>
+                            <div class="input-group" style="margin-top: 10px;">
+                                <label>Justification Reasoning</label>
+                                <input type="text" id="overrideReasoning" class="input-control" placeholder="E.g., Need unmasked IP for Sector 17 Cyber Cafe track">
+                            </div>
+                            <button class="btn btn-outline" onclick="requestOverride()">Submit Request to Senior Cell</button>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-title">Override Requests (Senior Desk)</div>
+                        <p style="color: var(--text-secondary); margin-bottom: 20px;">
+                            Pending firewall reveal requests. Senior Analysts can approve and issue cryptographic override tokens.
+                        </p>
+                        <div id="overrideRequestList" style="display: flex; flex-direction: column; gap: 15px;">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Audit tab -->
+            <div id="audit-tab" class="tab-content">
+                <div class="card" style="margin-bottom: 30px;">
+                    <div class="card-title" style="color: var(--accent);">⚠️ Active Anomaly Alerts</div>
+                    <p style="color: var(--text-secondary); margin-bottom: 20px;">System monitors and flags suspicious accesses or authorization failures.</p>
+                    <div id="anomalyList" style="display: flex; flex-direction: column; gap: 15px;">
+                        <!-- JS populated anomalies -->
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">Immutable Audit Trail (SHA-256 Anchored)</div>
+                    <div class="table-responsive">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Audit ID</th>
+                                    <th>Timestamp</th>
+                                    <th>User</th>
+                                    <th>Role</th>
+                                    <th>Action</th>
+                                    <th>Resource</th>
+                                    <th>Status</th>
+                                    <th>Details</th>
+                                </tr>
+                            </thead>
+                            <tbody id="auditLogList">
+                                <!-- Populated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        const API_URL = window.location.origin;
+        let token = "";
+        let currentUser = null;
+
+        // Apply presets for testing ease
+        function applyPreset() {
+            const preset = document.getElementById("loginPresets").value;
+            if (preset === "investigator1") {
+                document.getElementById("username").value = "investigator1";
+                document.getElementById("password").value = "password123";
+            } else if (preset === "senior_analyst1") {
+                document.getElementById("username").value = "senior_analyst1";
+                document.getElementById("password").value = "password123";
+            }
+        }
+
+        async function handleLogin() {
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+
+            try {
+                const response = await fetch(`${API_URL}/auth/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+
+                if (!response.ok) {
+                    alert("Invalid credentials.");
+                    return;
+                }
+
+                const data = await response.json();
+                token = data.access_token;
+                currentUser = data.user;
+
+                // Update UI state
+                document.getElementById("loginOverlay").style.display = "none";
+                document.getElementById("headerUserStatus").style.display = "flex";
+                document.getElementById("userNameDisplay").innerText = currentUser.name;
+                
+                const badge = document.getElementById("userRoleBadge");
+                badge.innerText = currentUser.role;
+                badge.className = "role-badge " + (currentUser.role === 'SENIOR_ANALYST' ? 'senior' : 'investigator');
+
+                // Initialize Views
+                runRiskEngine();
+                loadRawReports();
+                loadPackages();
+                loadOverrides();
+                loadAuditLogs();
+                loadAnomalies();
+
+            } catch (err) {
+                console.error(err);
+                alert("Login connection failed.");
+            }
+        }
+
+        function logout() {
+            token = "";
+            currentUser = null;
+            document.getElementById("loginOverlay").style.display = "flex";
+            document.getElementById("headerUserStatus").style.display = "none";
+        }
+
+        function switchTab(tabId, el) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+            
+            document.getElementById(tabId).classList.add('active');
+            el.classList.add('active');
+        }
+
+        // 1. Risk Engine XAI Force Calculation
+        async function runRiskEngine() {
+            if (!currentUser) return;
+            const drug_activity_count = parseInt(document.getElementById("metric_activity").value);
+            const cross_platform_links = parseInt(document.getElementById("metric_links").value);
+            const network_centrality = parseFloat(document.getElementById("metric_centrality").value) / 100;
+            const financial_transactions_val = parseFloat(document.getElementById("metric_financial").value);
+            const historical_cases = parseInt(document.getElementById("metric_history").value);
+            const active_days = parseInt(document.getElementById("metric_active").value);
+
+            try {
+                const response = await fetch(`${API_URL}/risk/evaluate`, {
+                    method: 'POST',
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({
+                        drug_activity_count,
+                        cross_platform_links,
+                        network_centrality,
+                        financial_transactions_val,
+                        historical_cases,
+                        active_days
+                    })
+                });
+                
+                const data = await response.json();
+                document.getElementById("riskScoreVal").innerText = data.priority_score;
+                
+                const classBadge = document.getElementById("riskClassBadge");
+                classBadge.innerText = data.classification;
+                if (data.classification === "CRITICAL" || data.classification === "HIGH") {
+                    classBadge.style.color = "var(--danger)";
+                    classBadge.style.borderColor = "var(--danger)";
+                } else if (data.classification === "MEDIUM") {
+                    classBadge.style.color = "var(--warning)";
+                    classBadge.style.borderColor = "var(--warning)";
+                } else {
+                    classBadge.style.color = "var(--success)";
+                    classBadge.style.borderColor = "var(--success)";
+                }
+
+                // Render SHAP Force Plot segments
+                const shapBar = document.getElementById("shapBar");
+                const legendList = document.getElementById("shapBreakdownList");
+                shapBar.innerHTML = "";
+                legendList.innerHTML = "";
+
+                const colors = [
+                    "#6c757d", // Base
+                    "#ff1744", // Drug
+                    "#ff9100", // Cross-Platform
+                    "#ffea00", // Network
+                    "#00e676", // Financial
+                    "#2979ff", // History
+                    "#d500f9"  // Active
+                ];
+
+                data.contributions.forEach((item, index) => {
+                    const width = (item.contribution / 100) * 100;
+                    if (width > 0) {
+                        const segment = document.createElement("div");
+                        segment.className = "shap-segment";
+                        segment.style.width = `${width}%`;
+                        segment.style.backgroundColor = colors[index];
+                        segment.title = `${item.feature}: +${item.contribution}`;
+                        shapBar.appendChild(segment);
+                    }
+
+                    // Legend
+                    legendList.innerHTML += `
+                        <div style="display: flex; align-items: center; gap: 8px; font-size: 13px;">
+                            <span style="width: 12px; height: 12px; border-radius: 3px; background: ${colors[index]}; display:inline-block;"></span>
+                            <span style="color: var(--text-secondary);">${item.feature}:</span>
+                            <strong style="color: white;">+${item.contribution}</strong>
+                        </div>
+                    `;
+                });
+
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        // 2. Intelligence Cell - Raw Reports & Packages
+        async function loadRawReports() {
+            try {
+                const res = await fetch(`${API_URL}/intelligence/raw-reports`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const reports = await res.json();
+                
+                const listEl = document.getElementById("rawReportsCheckboxList");
+                listEl.innerHTML = "";
+                reports.forEach(rep => {
+                    listEl.innerHTML += `
+                        <div style="margin-bottom: 5px;">
+                            <input type="checkbox" id="chk-${rep.report_id}" value="${rep.report_id}" checked>
+                            <label for="chk-${rep.report_id}" style="color: var(--text-primary); font-size: 14px; margin-left: 5px;">
+                                <strong>${rep.report_id}</strong> (${rep.source_type}) - Raw HASH: <span class="provenance-tag">${rep.sha256_provenance.slice(0, 10)}...</span>
+                            </label>
+                        </div>
+                    `;
+                });
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        async function loadPackages() {
+            try {
+                const res = await fetch(`${API_URL}/intelligence/packages`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const pkgs = await res.json();
+                
+                // Load packages table
+                const tableBody = document.getElementById("packageReviewList");
+                tableBody.innerHTML = "";
+                
+                pkgs.forEach(pkg => {
+                    const isApproved = pkg.status === "APPROVED";
+                    const isRejected = pkg.status === "REJECTED";
+                    const actionBtn = (pkg.status === "PENDING_REVIEW") 
+                        ? `<button class="btn" style="padding: 6px 12px; font-size: 12px;" onclick="approvePkg('${pkg.package_id}')">Approve</button>
+                           <button class="btn btn-danger" style="padding: 6px 12px; font-size: 12px; margin-left: 5px;" onclick="rejectPkg('${pkg.package_id}')">Reject</button>`
+                        : `<span style="color: ${isApproved ? 'var(--success)' : 'var(--danger)'}; font-weight:600;">${pkg.status}</span>`;
+                        
+                    tableBody.innerHTML += `
+                        <tr>
+                            <td><strong>${pkg.package_id}</strong></td>
+                            <td style="font-size: 13px; max-width: 300px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${pkg.compiled_summary}</td>
+                            <td>${pkg.confidence_rating}</td>
+                            <td><span class="provenance-tag">${pkg.package_sha256.slice(0, 12)}...</span></td>
+                            <td><span class="role-badge" style="background: rgba(255,255,255,0.05);">${pkg.status}</span></td>
+                            <td>${actionBtn}</td>
+                        </tr>
+                    `;
+                });
+
+                // Set up Firewall page demo load for PKG-041
+                loadFirewallDetail("PKG-041");
+
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        async function compilePackage() {
+            const package_id = document.getElementById("newPkgId").value;
+            const compiled_summary = document.getElementById("compiledSummary").value;
+            const confidence_rating = parseFloat(document.getElementById("confidenceRating").value);
+            
+            const raw_report_ids = [];
+            document.querySelectorAll("#rawReportsCheckboxList input:checked").forEach(chk => {
+                raw_report_ids.push(chk.value);
+            });
+
+            try {
+                const response = await fetch(`${API_URL}/intelligence/packages/compile`, {
+                    method: 'POST',
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ package_id, raw_report_ids, compiled_summary, confidence_rating })
+                });
+
+                if (response.ok) {
+                    alert("Package compiled successfully.");
+                    loadPackages();
+                    loadAuditLogs();
+                } else {
+                    const err = await response.json();
+                    alert(`Error: ${err.detail}`);
+                }
+            } catch (err) {
+                alert("Compilation failed.");
+            }
+        }
+
+        async function approvePkg(pkgId) {
+            try {
+                const res = await fetch(`${API_URL}/intelligence/packages/approve/${pkgId}`, {
+                    method: 'POST',
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (res.ok) {
+                    alert("Approved");
+                    loadPackages();
+                    loadAuditLogs();
+                } else {
+                    const err = await res.json();
+                    alert(`Error: ${err.detail}`);
+                }
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        async function rejectPkg(pkgId) {
+            try {
+                const res = await fetch(`${API_URL}/intelligence/packages/reject/${pkgId}`, {
+                    method: 'POST',
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (res.ok) {
+                    alert("Rejected");
+                    loadPackages();
+                    loadAuditLogs();
+                }
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        // 3. Firewall Simulation
+        async function loadFirewallDetail(pkgId, overrideToken = "") {
+            try {
+                const headers = { 'Authorization': `Bearer ${token}` };
+                if (overrideToken) {
+                    headers['override-token'] = overrideToken;
+                }
+                
+                const res = await fetch(`${API_URL}/intelligence/packages/${pkgId}`, { headers });
+                if (!res.ok) return;
+                const data = await res.json();
+
+                document.getElementById("firewallSummary").innerText = data.compiled_summary;
+                document.getElementById("firewallSha").innerText = data.package_sha256;
+
+                // Handle protected details
+                const detailsContainer = document.getElementById("firewallSourceDetails");
+                const notesContainer = document.getElementById("firewallAnalystNotes");
+
+                if (data.is_masked) {
+                    detailsContainer.innerHTML = `<span class="masked-text" style="background: linear-gradient(90deg, #ff1744, #ff5252);">🚧 FIREWALL PROTECTED</span>`;
+                    notesContainer.innerHTML = `<span class="masked-text" style="background: linear-gradient(90deg, #ff1744, #ff5252);">🚧 FIREWALL PROTECTED</span>`;
+                } else {
+                    // Show raw reports (unmasked)
+                    if (data.raw_reports && data.raw_reports.length > 0) {
+                        const r = data.raw_reports[0];
+                        detailsContainer.innerHTML = `<span style="color:var(--success); font-weight:600;">✓ REVEALED:</span> <span style="font-family:monospace;">${r.source_details}</span>`;
+                        notesContainer.innerHTML = `<span style="color:var(--success); font-weight:600;">✓ REVEALED:</span> <span>${r.analyst_notes}</span>`;
+                    } else {
+                        detailsContainer.innerText = "No source details found.";
+                        notesContainer.innerText = "No analyst notes found.";
+                    }
+                }
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        async function requestOverride() {
+            const reasoning = document.getElementById("overrideReasoning").value;
+            if (!reasoning) {
+                alert("Please supply justification reasoning.");
+                return;
+            }
+
+            try {
+                const res = await fetch(`${API_URL}/firewall/request-override`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({
+                        package_id: "PKG-041",
+                        requested_field: "source_details",
+                        reasoning: reasoning
+                    })
+                });
+
+                if (res.ok) {
+                    alert("Firewall override requested submitted to Senior desk.");
+                    document.getElementById("overrideReasoning").value = "";
+                    loadOverrides();
+                    loadAuditLogs();
+                }
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        async function loadOverrides() {
+            try {
+                const res = await fetch(`${API_URL}/firewall/list-overrides`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const list = await res.json();
+                
+                const container = document.getElementById("overrideRequestList");
+                container.innerHTML = "";
+
+                if (list.length === 0) {
+                    container.innerHTML = `<p style="color: var(--text-secondary); text-align: center;">No override requests registered.</p>`;
+                    return;
+                }
+
+                list.forEach(req => {
+                    const isPending = req.status === "PENDING";
+                    let actionHtml = "";
+                    if (isPending) {
+                        actionHtml = `
+                            <div style="margin-top: 10px; display:flex; gap: 8px;">
+                                <button class="btn" style="padding: 6px 12px; font-size:12px;" onclick="processOverride('${req.request_id}', true)">Approve reveal</button>
+                                <button class="btn btn-danger" style="padding: 6px 12px; font-size:12px;" onclick="processOverride('${req.request_id}', false)">Deny</button>
+                            </div>
+                        `;
+                    } else if (req.status === "APPROVED") {
+                        actionHtml = `
+                            <div style="margin-top: 10px;">
+                                <span class="role-badge" style="background: rgba(0, 230, 118, 0.1); color: var(--success); border:1px solid var(--success)">Approved</span>
+                                <div style="margin-top: 8px; font-size: 12px; color: var(--text-secondary);">
+                                    Cryptographic Token:<br>
+                                    <span class="provenance-tag" style="word-break: break-all; font-size: 11px;">${req.auth_token}</span>
+                                    <button class="btn btn-outline" style="padding: 3px 6px; font-size: 10px; margin-top: 5px; display: block;" onclick="applyOverrideToken('${req.auth_token}')">Apply Token</button>
+                                </div>
+                            </div>
+                        `;
+                    } else {
+                        actionHtml = `<span class="role-badge" style="background: rgba(255, 23, 68, 0.1); color: var(--danger); border:1px solid var(--danger); margin-top: 10px; display: inline-block;">Denied</span>`;
+                    }
+
+                    container.innerHTML += `
+                        <div style="background: rgba(255, 255, 255, 0.02); padding: 15px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05);">
+                            <div style="display:flex; justify-content:space-between; align-items:center;">
+                                <strong>Request ID: ${req.request_id}</strong>
+                                <span style="font-size: 12px; color: var(--text-secondary);">${req.investigator}</span>
+                            </div>
+                            <p style="font-size: 13px; margin: 8px 0; line-height:1.4;">
+                                <strong>Reasoning:</strong> "${req.reasoning}"
+                            </p>
+                            ${actionHtml}
+                        </div>
+                    `;
+                });
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        async function processOverride(reqId, approved) {
+            try {
+                const res = await fetch(`${API_URL}/firewall/process-override`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({
+                        request_id: reqId,
+                        approved: approved
+                    })
+                });
+
+                if (res.ok) {
+                    alert(approved ? "Override Approved and Token Issued." : "Override Denied.");
+                    loadOverrides();
+                    loadAuditLogs();
+                } else {
+                    const err = await res.json();
+                    alert(`Error: ${err.detail}`);
+                }
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        function applyOverrideToken(overrideToken) {
+            loadFirewallDetail("PKG-041", overrideToken);
+            alert("Cryptographic override applied! Check the Investigator Case Workspace.");
+        }
+
+        // 4. Auditing & Compliance
+        async function loadAuditLogs() {
+            try {
+                const res = await fetch(`${API_URL}/audit/logs`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (!res.ok) return;
+                const logs = await res.json();
+                
+                const listEl = document.getElementById("auditLogList");
+                listEl.innerHTML = "";
+                logs.forEach(log => {
+                    const statusClass = log.status === 'ALLOWED' ? 'var(--success)' : (log.status === 'BLOCKED' ? 'var(--danger)' : 'var(--warning)');
+                    listEl.innerHTML += `
+                        <tr>
+                            <td><span style="font-size: 11px; font-family:monospace; color:var(--text-secondary);">${log.log_id}</span></td>
+                            <td style="font-size: 12px; white-space: nowrap;">${log.formatted_time}</td>
+                            <td><strong>${log.username}</strong></td>
+                            <td><span class="role-badge" style="padding: 2px 6px; font-size: 10px; background: rgba(255,255,255,0.05);">${log.role}</span></td>
+                            <td><span style="font-family: monospace; font-size:12px;">${log.action}</span></td>
+                            <td>${log.resource}</td>
+                            <td><span style="color: ${statusClass}; font-weight:600; font-size:12px;">${log.status}</span></td>
+                            <td style="font-size: 12px; max-width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${log.details}">${log.details}</td>
+                        </tr>
+                    `;
+                });
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        async function loadAnomalies() {
+            try {
+                const res = await fetch(`${API_URL}/audit/anomalies`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (!res.ok) return;
+                const anomalies = await res.json();
+                
+                const container = document.getElementById("anomalyList");
+                container.innerHTML = "";
+
+                if (anomalies.length === 0) {
+                    container.innerHTML = `
+                        <div style="background: rgba(0, 230, 118, 0.05); color: var(--success); padding: 15px; border-radius: 8px; border: 1px solid rgba(0, 230, 118, 0.2); text-align: center;">
+                            ✓ No anomalies or suspicious activities detected. All credentials compliant.
+                        </div>
+                    `;
+                    return;
+                }
+
+                anomalies.forEach(anom => {
+                    const badgeColor = anom.severity === 'CRITICAL' ? 'var(--danger)' : 'var(--warning)';
+                    container.innerHTML += `
+                        <div style="background: rgba(255, 23, 68, 0.05); border: 1px solid rgba(255, 23, 68, 0.2); border-left: 5px solid ${badgeColor}; padding: 15px; border-radius: 8px; display:flex; justify-content:space-between; align-items:center;">
+                            <div>
+                                <strong style="color: white; font-size: 14px;">${anom.type}</strong>
+                                <p style="font-size: 13px; color: var(--text-secondary); margin-top: 5px;">${anom.description}</p>
+                            </div>
+                            <span class="role-badge" style="background: rgba(255,23,68,0.1); color: ${badgeColor}; border: 1px solid ${badgeColor};">${anom.severity}</span>
+                        </div>
+                    `;
+                });
+            } catch (err) {
+                console.error(err);
+            }
+        }
+    </script>
+</body>
+</html>
