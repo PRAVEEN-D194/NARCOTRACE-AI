@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>NARCO-TRACE AI | Member 2</title>
+
+    <link rel="stylesheet" href="/static/style.css">
+
+</head>
+
+
+<body>
+
+
+<!-- ================= HEADER ================= -->
+
+<header>
+
+    <div class="logo-section">
+
+        <h1>NARCO-TRACE <span>AI</span></h1>
+
+        <p>MEMBER 2 • CORRELATION INTELLIGENCE ENGINE</p>
+
+    </div>
+
+
+    <div class="header-status">
+
+        ● SYSTEM READY
+
+    </div>
+
+</header>
+
+
+
+<main>
+
+
+<!-- ================= HERO ================= -->
+
+<section class="hero">
+
+    <div>
+
+        <p class="eyebrow">
+            CROSS-PLATFORM ENTITY INTELLIGENCE
+        </p>
+
+        <h2>
+            Detect. Correlate. Trace.
+        </h2>
+
+        <p class="hero-text">
+
+            Analyze fragmented identities, aliases,
+            behavioral patterns, temporal activity
+            and financial relationships to identify
+            explainable potential connections.
+
+        </p>
+
+    </div>
+
+
+    <div class="human-review">
+
+        <div class="warning-icon">⚠</div>
+
+        <div>
+
+            <strong>
+                HUMAN VERIFICATION REQUIRED
+            </strong>
+
+            <p>
+                AI-generated correlation is an
+                investigative lead, not identity proof.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- ================= INPUT SECTION ================= -->
+
+<section class="section-title">
+
+    <p>01</p>
+
+    <div>
+
+        <h2>ENTITY COMPARISON INPUT</h2>
+
+        <span>
+            Compare two identities across different platforms
+        </span>
+
+    </div>
+
+</section>
+
+
+
+<section class="input-grid">
+
+
+    <!-- ENTITY A -->
+
+    <div class="input-card">
+
+        <div class="card-header">
+
+            <span class="entity-badge">
+                ENTITY A
+            </span>
+
+        </div>
+
+
+        <label>Username / Alias</label>
+
+        <input
+            id="usernameA"
+            type="text"
+            placeholder="Example: DarkWolf23"
+        >
+
+
+        <label>Platform</label>
+
+        <select id="platformA">
+
+            <option>Dark Web</option>
+
+            <option>Telegram</option>
+
+            <option>Forum</option>
+
+            <option>Case Database</option>
+
+        </select>
+
+
+        <label>Associated Text</label>
+
+        <textarea
+            id="textA"
+            placeholder="Associated message or profile text"
+        ></textarea>
+
+
+        <label>Wallet ID</label>
+
+        <input
+            id="walletA"
+            type="text"
+            placeholder="Example: Wallet-X"
+        >
+
+    </div>
+
+
+
+    <!-- ENTITY B -->
+
+    <div class="input-card">
+
+        <div class="card-header">
+
+            <span class="entity-badge">
+                ENTITY B
+            </span>
+
+        </div>
+
+
+        <label>Username / Alias</label>
+
+        <input
+            id="usernameB"
+            type="text"
+            placeholder="Example: Wolf_23"
+        >
+
+
+        <label>Platform</label>
+
+        <select id="platformB">
+
+            <option>Telegram</option>
+
+            <option>Dark Web</option>
+
+            <option>Forum</option>
+
+            <option>Case Database</option>
+
+        </select>
+
+
+        <label>Associated Text</label>
+
+        <textarea
+            id="textB"
+            placeholder="Associated message or profile text"
+        ></textarea>
+
+
+        <label>Wallet ID</label>
+
+        <input
+            id="walletB"
+            type="text"
+            placeholder="Example: Wallet-Y"
+        >
+
+    </div>
+
+
+</section>
+
+
+
+<div class="button-container">
+
+    <button
+        class="secondary-btn"
+        id="loadSampleBtn"
+    >
+
+        LOAD DEMO DATA
+
+    </button>
+
+
+    <button
+        class="primary-btn"
+        id="analyzeBtn"
+    >
+
+        ANALYZE RELATIONSHIP →
+
+    </button>
+
+</div>
+
+
+
+<!-- ================= ENTITY SUMMARY ================= -->
+
+<section class="section-title">
+
+    <p>02</p>
+
+    <div>
+
+        <h2>ENTITY RESOLUTION</h2>
+
+        <span>
+            Cross-platform identity comparison
+        </span>
+
+    </div>
+
+</section>
+
+
+<section class="entity-grid">
+
+
+    <div class="entity-card">
+
+        <h3>ENTITY A</h3>
+
+        <div id="entityA">
+
+            No entity loaded.
+
+        </div>
+
+    </div>
+
+
+    <div class="entity-card">
+
+        <h3>ENTITY B</h3>
+
+        <div id="entityB">
+
+            No entity loaded.
+
+        </div>
+
+    </div>
+
+
+</section>
+
+
+
+<!-- ================= SCORES ================= -->
+
+<section class="section-title">
+
+    <p>03</p>
+
+    <div>
+
+        <h2>CORRELATION SIGNALS</h2>
+
+        <span>
+            Multiple signals are combined to generate
+            an explainable confidence score.
+        </span>
+
+    </div>
+
+</section>
+
+
+<section id="scoreGrid"
+         class="score-grid">
+
+    <div class="empty-message">
+
+        Run an analysis to generate correlation signals.
+
+    </div>
+
+</section>
+
+
+
+<!-- ================= WALLET FLOW ================= -->
+
+<section class="section-title">
+
+    <p>04</p>
+
+    <div>
+
+        <h2>FINANCIAL RELATIONSHIP FLOW</h2>
+
+        <span>
+            Wallet and transaction correlation
+        </span>
+
+    </div>
+
+</section>
+
+
+<section class="wallet-section">
+
+
+    <div class="wallet-flow">
+
+        <div class="wallet-node">
+
+            <span>ENTITY A</span>
+
+            <strong id="walletEntityA">
+                —
+            </strong>
+
+        </div>
+
+
+        <div class="flow-arrow">
+
+            ↓
+
+        </div>
+
+
+        <div class="wallet-node highlight">
+
+            <span>WALLET</span>
+
+            <strong id="walletAFlow">
+                —
+            </strong>
+
+        </div>
+
+
+        <div class="transaction-box">
+
+            <span>
+                TRANSACTION
+            </span>
+
+            <strong id="transactionAmount">
+                —
+            </strong>
+
+        </div>
+
+
+        <div class="wallet-node highlight">
+
+            <span>WALLET</span>
+
+            <strong id="walletBFlow">
+                —
+            </strong>
+
+        </div>
+
+
+        <div class="flow-arrow">
+
+            ↓
+
+        </div>
+
+
+        <div class="wallet-node">
+
+            <span>ENTITY B</span>
+
+            <strong id="walletEntityB">
+                —
+            </strong>
+
+        </div>
+
+    </div>
+
+
+    <div class="transaction-table-container">
+
+        <h3>TRANSACTION INTELLIGENCE</h3>
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>FROM</th>
+
+                    <th>TO</th>
+
+                    <th>AMOUNT</th>
+
+                    <th>TIME</th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody id="transactionTable">
+
+                <tr>
+
+                    <td colspan="4">
+
+                        No transaction data loaded.
+
+                    </td>
+
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</section>
+
+
+
+<!-- ================= RESULT ================= -->
+
+<section class="section-title">
+
+    <p>05</p>
+
+    <div>
+
+        <h2>INTELLIGENCE ASSESSMENT</h2>
+
+        <span>
+            Explainable AI-assisted correlation result
+        </span>
+
+    </div>
+
+</section>
+
+
+<section class="result-section">
+
+
+    <div class="confidence-panel">
+
+        <p>OVERALL CONFIDENCE</p>
+
+        <div
+            class="confidence-circle"
+            id="overall"
+        >
+
+            --%
+
+        </div>
+
+
+        <h2 id="status">
+
+            AWAITING ANALYSIS
+
+        </h2>
+
+    </div>
+
+
+
+    <div class="explanation-panel">
+
+        <h3>
+
+            WHY WAS THIS CONNECTION FLAGGED?
+
+        </h3>
+
+
+        <ul id="reasons">
+
+            <li>
+                Run an analysis to generate
+                an explanation.
+            </li>
+
+        </ul>
+
+    </div>
+
+
+</section>
+
+
+
+<!-- ================= FOOTER ================= -->
+
+<div class="final-warning">
+
+    ⚠ HUMAN VERIFICATION REQUIRED
+
+    <span>
+
+        Correlation signals are investigative leads.
+        They do not automatically prove identity,
+        criminal involvement or a factual relationship.
+
+    </span>
+
+</div>
+
+
+</main>
+
+
+<script src="/static/script.js"></script>
+
+
+</body>
+
+</html>
