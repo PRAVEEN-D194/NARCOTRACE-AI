@@ -6,7 +6,7 @@ This repository unifies five isolated functional modules (NLP extraction, wallet
 
 ---
 
-## 🛠️ Architecture & Unified Components
+##  Architecture & Unified Components
 
 The platform consolidates five primary intelligence disciplines:
 
@@ -29,7 +29,7 @@ The platform consolidates five primary intelligence disciplines:
 
 ---
 
-## 📁 Repository Directory Structure
+##  Repository Directory Structure
 
 ```
 NARCOTRACE-AI/
@@ -47,7 +47,7 @@ NARCOTRACE-AI/
 
 ---
 
-## 🚀 Setup and Installation
+## Setup and Installation
 
 ### 1. Prerequisites
 - **Python**: Version `3.10` or above
@@ -85,7 +85,7 @@ Uvicorn will spin up the server on **http://localhost:8000** containing both the
 
 ---
 
-## 🛡️ Role-Based Access Control (RBAC) Test Matrix
+##  Role-Based Access Control (RBAC) Test Matrix
 
 Log in using the pre-configured badge IDs on the portal login screen to test the dynamic firewall and masking:
 
