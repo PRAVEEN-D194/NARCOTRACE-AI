@@ -8,7 +8,6 @@ import {
   ArrowLeft,
   Search,
   Maximize2,
-  Filter,
 } from 'lucide-react';
 import { NetworkData, NetworkNode } from '../../types';
 import { Button } from '../common/Button';
@@ -29,22 +28,22 @@ export const NetworkGraph: React.FC<NetworkGraphProps> = ({
   const [searchQuery, setSearchQuery] = useState('');
   const [activeTraceMode, setActiveTraceMode] = useState<'all' | 'forward' | 'backward'>('all');
 
-  // Colors based on EntityType
+  // Color mapping per entity type
   const getTypeColor = (type: string, isSubject?: boolean) => {
-    if (isSubject) return '#f43f5e'; // Rose pink
+    if (isSubject) return '#EF4444'; // Red/Rose for primary subject
     switch (type) {
       case 'Person':
-        return '#00f0ff'; // Cyber cyan
+        return '#3B82F6'; // Blue
       case 'Account':
-        return '#8b5cf6'; // Purple
+        return '#8B5CF6'; // Purple
       case 'Wallet':
-        return '#f59e0b'; // Amber gold
+        return '#F59E0B'; // Amber
       case 'Platform':
-        return '#3b82f6'; // Blue
+        return '#06B6D4'; // Cyan
       case 'Organization':
-        return '#10b981'; // Emerald
+        return '#10B981'; // Emerald
       default:
-        return '#64748b';
+        return '#64748B';
     }
   };
 
@@ -85,29 +84,23 @@ export const NetworkGraph: React.FC<NetworkGraphProps> = ({
           style: {
             'background-color': 'data(color)',
             label: 'data(label)',
-            color: '#f8fafc',
-            'font-family': 'JetBrains Mono, monospace',
+            color: '#F8FAFC',
+            'font-family': 'Inter, system-ui, sans-serif',
             'font-size': '12px',
-            'font-weight': 'bold',
+            'font-weight': '600',
             'text-valign': 'bottom',
             'text-margin-y': 6,
-            width: (node: cytoscape.NodeSingular) => (node.data('isSubject') === 'true' ? 52 : 38),
-            height: (node: cytoscape.NodeSingular) => (node.data('isSubject') === 'true' ? 52 : 38),
-            'border-width': (node: cytoscape.NodeSingular) => (node.data('isSubject') === 'true' ? 4 : 2),
-            'border-color': '#0f172a',
-            'shadow-blur': 15,
-            'shadow-color': 'data(color)',
-            'shadow-opacity': 0.8,
+            width: (node: cytoscape.NodeSingular) => (node.data('isSubject') === 'true' ? 48 : 36),
+            height: (node: cytoscape.NodeSingular) => (node.data('isSubject') === 'true' ? 48 : 36),
+            'border-width': (node: cytoscape.NodeSingular) => (node.data('isSubject') === 'true' ? 3 : 2),
+            'border-color': '#0F172A',
           },
         },
         {
           selector: 'node:selected',
           style: {
             'border-width': 4,
-            'border-color': '#ffffff',
-            'shadow-blur': 25,
-            'shadow-color': '#ffffff',
-            'shadow-opacity': 1,
+            'border-color': '#FFFFFF',
           },
         },
         {
@@ -115,27 +108,27 @@ export const NetworkGraph: React.FC<NetworkGraphProps> = ({
           style: {
             width: 2,
             'line-color': '#334155',
-            'target-arrow-color': '#00f0ff',
+            'target-arrow-color': '#3B82F6',
             'target-arrow-shape': 'triangle',
             'curve-style': 'bezier',
             label: 'data(label)',
-            color: '#94a3b8',
-            'font-family': 'JetBrains Mono, monospace',
-            'font-size': '9px',
-            'text-background-opacity': 0.85,
-            'text-background-color': '#0b111e',
+            color: '#94A3B8',
+            'font-family': 'Inter, system-ui, sans-serif',
+            'font-size': '10px',
+            'text-background-opacity': 0.9,
+            'text-background-color': '#070C16',
             'text-background-padding': '3px',
             'text-background-shape': 'roundrectangle',
-            'arrow-scale': 1.2,
+            'arrow-scale': 1.1,
           },
         },
         {
           selector: 'edge.highlighted',
           style: {
-            width: 4,
-            'line-color': '#00f0ff',
-            'target-arrow-color': '#00f0ff',
-            color: '#00f0ff',
+            width: 3.5,
+            'line-color': '#3B82F6',
+            'target-arrow-color': '#3B82F6',
+            color: '#60A5FA',
             'font-weight': 'bold',
           },
         },
@@ -143,25 +136,23 @@ export const NetworkGraph: React.FC<NetworkGraphProps> = ({
           selector: 'node.highlighted',
           style: {
             'border-width': 4,
-            'border-color': '#00f0ff',
-            'shadow-blur': 25,
-            'shadow-color': '#00f0ff',
+            'border-color': '#3B82F6',
           },
         },
         {
           selector: '.faded',
           style: {
-            opacity: 0.25,
+            opacity: 0.2,
           },
         },
       ] as any,
       layout: {
         name: 'breadthfirst',
         directed: true,
-        padding: 40,
-        spacingFactor: 1.45,
+        padding: 50,
+        spacingFactor: 1.35,
         animate: true,
-        animationDuration: 500,
+        animationDuration: 400,
       },
     });
 
@@ -219,14 +210,14 @@ export const NetworkGraph: React.FC<NetworkGraphProps> = ({
     if (match.length > 0) {
       cy.animate({
         center: { eles: match },
-        zoom: 1.5,
+        zoom: 1.4,
       });
       match.select();
       onSelectNode(match.first().data('rawNode'));
     }
   };
 
-  // Forward Trace algorithm (Subject -> Downstream targets)
+  // Forward Trace algorithm
   const handleForwardTrace = () => {
     if (!cyRef.current) return;
     const cy = cyRef.current;
@@ -234,7 +225,6 @@ export const NetworkGraph: React.FC<NetworkGraphProps> = ({
     const subject = cy.nodes('[isSubject = "true"]').first();
     if (subject.length === 0) return;
 
-    // Outgoers traversal
     const outgoers = subject.outgoers();
     cy.elements().addClass('faded');
     subject.removeClass('faded');
@@ -242,12 +232,12 @@ export const NetworkGraph: React.FC<NetworkGraphProps> = ({
     outgoers.edges().addClass('highlighted');
 
     cy.animate({
-      fit: { eles: subject.union(outgoers), padding: 50 },
-      duration: 500,
+      fit: { eles: subject.union(outgoers), padding: 60 },
+      duration: 400,
     });
   };
 
-  // Backward Trace algorithm (Upstream suppliers -> Subject)
+  // Backward Trace algorithm
   const handleBackwardTrace = () => {
     if (!cyRef.current) return;
     const cy = cyRef.current;
@@ -255,7 +245,6 @@ export const NetworkGraph: React.FC<NetworkGraphProps> = ({
     const subject = cy.nodes('[isSubject = "true"]').first();
     if (subject.length === 0) return;
 
-    // Incomers traversal
     const incomers = subject.incomers();
     cy.elements().addClass('faded');
     subject.removeClass('faded');
@@ -263,32 +252,32 @@ export const NetworkGraph: React.FC<NetworkGraphProps> = ({
     incomers.edges().addClass('highlighted');
 
     cy.animate({
-      fit: { eles: subject.union(incomers), padding: 50 },
-      duration: 500,
+      fit: { eles: subject.union(incomers), padding: 60 },
+      duration: 400,
     });
   };
 
-  // Reset Graph view
+  // Reset View
   const handleResetGraph = () => {
     if (!cyRef.current) return;
     const cy = cyRef.current;
     setActiveTraceMode('all');
     cy.elements().removeClass('faded').removeClass('highlighted').unselect();
     cy.animate({
-      fit: { eles: cy.elements(), padding: 40 },
-      duration: 500,
+      fit: { eles: cy.elements(), padding: 50 },
+      duration: 400,
     });
     onSelectNode(null);
   };
 
   return (
-    <div className="relative w-full h-[620px] bg-slate-900 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden shadow-sm dark:shadow-2xl flex flex-col transition-colors duration-200">
-      {/* Network Graph Toolbar */}
-      <div className="p-3 bg-slate-50 dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 flex flex-wrap items-center justify-between gap-3 relative z-20">
+    <div className="relative w-full h-[680px] bg-slate-900 border border-slate-800 rounded-xl overflow-hidden shadow-md flex flex-col transition-colors duration-150 font-sans">
+      {/* Network Graph Controls Bar */}
+      <div className="p-3 bg-slate-950 border-b border-slate-800 flex flex-wrap items-center justify-between gap-3 relative z-20">
         {/* Trace Buttons */}
         <div className="flex items-center space-x-2">
           <Button
-            variant={activeTraceMode === 'forward' ? 'primary' : 'outline'}
+            variant={activeTraceMode === 'forward' ? 'primary' : 'secondary'}
             size="sm"
             icon={ArrowRight}
             onClick={handleForwardTrace}
@@ -296,7 +285,7 @@ export const NetworkGraph: React.FC<NetworkGraphProps> = ({
             Forward Trace
           </Button>
           <Button
-            variant={activeTraceMode === 'backward' ? 'primary' : 'outline'}
+            variant={activeTraceMode === 'backward' ? 'primary' : 'secondary'}
             size="sm"
             icon={ArrowLeft}
             onClick={handleBackwardTrace}
@@ -309,20 +298,20 @@ export const NetworkGraph: React.FC<NetworkGraphProps> = ({
             icon={RotateCcw}
             onClick={handleResetGraph}
           >
-            Reset Graph
+            Reset View
           </Button>
         </div>
 
-        {/* Search Node */}
+        {/* Search Entity Form */}
         <form onSubmit={handleSearch} className="flex items-center space-x-2">
           <div className="relative">
             <Search className="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-2.5" />
             <input
               type="text"
-              placeholder="Search node / entity..."
+              placeholder="Search Entity..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-8 pr-3 py-1.5 bg-slate-950 text-slate-200 placeholder-slate-500 text-xs font-mono rounded border border-slate-800 focus:border-cyan-500 focus:outline-none w-48"
+              className="pl-8 pr-3 py-1.5 bg-slate-900 text-slate-200 placeholder-slate-500 text-xs rounded-lg border border-slate-800 focus:border-blue-500 focus:outline-none w-48 font-sans"
             />
           </div>
           <Button type="submit" variant="secondary" size="sm">
@@ -333,56 +322,57 @@ export const NetworkGraph: React.FC<NetworkGraphProps> = ({
         {/* Zoom Controls */}
         <div className="flex items-center space-x-1 border-l border-slate-800 pl-3">
           <button
-            onClick={() => cyRef.current?.zoom(cyRef.current.zoom() * 1.2)}
+            onClick={() => cyRef.current?.zoom(cyRef.current.zoom() * 1.25)}
             title="Zoom In"
-            className="p-1.5 text-slate-400 hover:text-slate-200 hover:bg-slate-800 rounded"
+            className="p-1.5 text-slate-400 hover:text-slate-200 hover:bg-slate-800 rounded-lg"
           >
             <ZoomIn className="w-4 h-4" />
           </button>
           <button
             onClick={() => cyRef.current?.zoom(cyRef.current.zoom() * 0.8)}
             title="Zoom Out"
-            className="p-1.5 text-slate-400 hover:text-slate-200 hover:bg-slate-800 rounded"
+            className="p-1.5 text-slate-400 hover:text-slate-200 hover:bg-slate-800 rounded-lg"
           >
             <ZoomOut className="w-4 h-4" />
           </button>
           <button
             onClick={handleResetGraph}
-            title="Fit to View"
-            className="p-1.5 text-slate-400 hover:text-slate-200 hover:bg-slate-800 rounded"
+            title="Reset View"
+            className="p-1.5 text-slate-400 hover:text-slate-200 hover:bg-slate-800 rounded-lg"
           >
             <Maximize2 className="w-4 h-4" />
           </button>
         </div>
       </div>
 
-      {/* Legend & Status Ribbon */}
-      <div className="px-4 py-1.5 bg-slate-950/80 border-b border-slate-800/80 flex items-center justify-between text-[11px] font-mono text-slate-400 relative z-10">
-        <div className="flex items-center space-x-4">
-          <span className="flex items-center space-x-1">
-            <span className="w-2.5 h-2.5 rounded-full bg-rose-500 inline-block" />
+      {/* Graph Legend Ribbon */}
+      <div className="px-4 py-2 bg-slate-950/90 border-b border-slate-800/80 flex items-center justify-between text-xs font-sans text-slate-400 relative z-10">
+        <div className="flex flex-wrap items-center gap-4">
+          <span className="text-slate-400 font-semibold uppercase text-[11px]">Legend:</span>
+          <span className="flex items-center space-x-1.5">
+            <span className="w-2.5 h-2.5 rounded-full bg-red-500 inline-block" />
             <span>Subject</span>
           </span>
-          <span className="flex items-center space-x-1">
-            <span className="w-2.5 h-2.5 rounded-full bg-cyan-400 inline-block" />
+          <span className="flex items-center space-x-1.5">
+            <span className="w-2.5 h-2.5 rounded-full bg-blue-500 inline-block" />
             <span>Person</span>
           </span>
-          <span className="flex items-center space-x-1">
-            <span className="w-2.5 h-2.5 rounded-full bg-amber-400 inline-block" />
-            <span>Wallet</span>
-          </span>
-          <span className="flex items-center space-x-1">
-            <span className="w-2.5 h-2.5 rounded-full bg-purple-400 inline-block" />
+          <span className="flex items-center space-x-1.5">
+            <span className="w-2.5 h-2.5 rounded-full bg-purple-500 inline-block" />
             <span>Account</span>
           </span>
-          <span className="flex items-center space-x-1">
-            <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 inline-block" />
+          <span className="flex items-center space-x-1.5">
+            <span className="w-2.5 h-2.5 rounded-full bg-amber-500 inline-block" />
+            <span>Wallet</span>
+          </span>
+          <span className="flex items-center space-x-1.5">
+            <span className="w-2.5 h-2.5 rounded-full bg-cyan-500 inline-block" />
+            <span>Platform</span>
+          </span>
+          <span className="flex items-center space-x-1.5">
+            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 inline-block" />
             <span>Supplier</span>
           </span>
-        </div>
-        <div className="flex items-center space-x-1 text-cyan-400">
-          <Filter className="w-3 h-3" />
-          <span>Interactive Topology View // Member 3 Engine</span>
         </div>
       </div>
 

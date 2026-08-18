@@ -15,11 +15,11 @@ export const Layout: React.FC = () => {
   };
 
   return (
-    <div className="flex h-screen w-screen overflow-hidden bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 transition-colors duration-200">
+    <div className="flex h-screen w-screen overflow-hidden bg-slate-50 dark:bg-[#070C16] text-slate-900 dark:text-slate-100 transition-colors duration-200">
       <Sidebar isMobileOpen={isMobileOpen} onCloseMobile={closeMobile} />
       <div className="flex flex-col flex-1 min-w-0 h-full overflow-hidden">
         <Navbar onToggleMobile={toggleMobile} />
-        <main className="flex-1 overflow-y-auto p-3 sm:p-4 md:p-6 bg-gradient-to-b from-slate-100 to-slate-200 dark:from-slate-950 dark:to-slate-900 transition-colors duration-200">
+        <main className="flex-1 overflow-y-auto p-6 sm:p-8 bg-slate-50 dark:bg-[#070C16] transition-colors duration-200">
           <Outlet />
         </main>
       </div>

@@ -9,24 +9,27 @@ export default {
     extend: {
       colors: {
         slate: {
-          850: '#141e30',
-          925: '#0b111e',
-          950: '#070c14',
+          850: '#111827',
+          900: '#0F172A',
+          925: '#0B1120',
+          950: '#070C16',
         },
-        cyber: {
-          blue: '#00f0ff',
-          emerald: '#10b981',
-          rose: '#f43f5e',
-          amber: '#f59e0b',
-          purple: '#8b5cf6',
-          dark: '#0f172a',
+        intel: {
+          bg: '#080D1A',
+          card: '#0F172A',
+          border: '#1E293B',
+          accent: '#2563EB',
+          cyan: '#06B6D4',
         }
       },
       fontFamily: {
-        mono: ['JetBrains Mono', 'Fira Code', 'monospace'],
-        sans: ['Inter', 'system-ui', 'sans-serif'],
+        headline: ['Space Grotesk', 'sans-serif'],
+        mono: ['JetBrains Mono', 'Fira Code', 'Consolas', 'monospace'],
+        sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
       }
+
     },
   },
   plugins: [],
 }
+

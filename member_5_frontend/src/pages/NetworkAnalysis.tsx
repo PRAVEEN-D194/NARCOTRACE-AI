@@ -4,7 +4,7 @@ import { api } from '../services/api';
 import { Case, NetworkData, NetworkNode } from '../types';
 import { NetworkGraph } from '../components/network/NetworkGraph';
 import { NodeDetailPanel } from '../components/network/NodeDetailPanel';
-import { LoadingSpinner } from '../components/common/LoadingSpinner';
+import { SkeletonCard } from '../components/common/SkeletonLoader';
 
 export const NetworkAnalysis: React.FC = () => {
   const [cases, setCases] = useState<Case[]>([]);
@@ -39,27 +39,30 @@ export const NetworkAnalysis: React.FC = () => {
   }, [selectedCaseId]);
 
   return (
-    <div className="space-y-6 max-w-7xl mx-auto">
+    <div className="space-y-8 max-w-5xl mx-auto font-sans pb-12">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-slate-200 dark:border-slate-800">
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-2 border-b border-slate-200 dark:border-slate-800">
         <div>
-          <h1 className="text-xl sm:text-2xl font-mono font-extrabold text-slate-900 dark:text-slate-100 tracking-tight flex items-center space-x-2">
-            <Network className="w-6 h-6 text-cyan-600 dark:text-cyan-400" />
-            <span>INTERACTIVE NETWORK TOPOLOGY</span>
+          <span className="inline-block px-3 py-1 rounded-full bg-blue-500/10 text-blue-700 dark:text-blue-400 font-mono text-xs font-bold mb-2 border border-blue-500/20">
+            GRAPH TOPOLOGY VISUALIZER
+          </span>
+          <h1 className="font-headline text-4xl sm:text-5xl font-bold text-slate-900 dark:text-slate-100 tracking-tight flex items-center space-x-3">
+            <Network className="w-8 h-8 text-blue-600 dark:text-blue-400" />
+            <span>Network Analysis</span>
           </h1>
-          <p className="text-xs text-slate-500 dark:text-slate-400 font-mono mt-0.5">
-            Member 3 Graph Algorithm Integration // Directed Entity Relationship Tracer
+          <p className="text-sm text-slate-600 dark:text-slate-400 font-sans mt-1">
+            Explore relationships between entities, accounts, wallets, and platforms.
           </p>
         </div>
 
         {/* Case Switcher */}
-        <div className="flex items-center space-x-2 font-mono text-xs">
-          <Filter className="w-4 h-4 text-cyan-600 dark:text-cyan-400" />
-          <span className="text-slate-500 dark:text-slate-400">Select Target Case:</span>
+        <div className="flex items-center space-x-2 font-sans text-xs">
+          <Filter className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+          <span className="text-slate-600 dark:text-slate-400 font-medium">Select Case:</span>
           <select
             value={selectedCaseId}
             onChange={(e) => setSelectedCaseId(e.target.value)}
-            className="px-3 py-1.5 bg-white dark:bg-slate-900 text-cyan-700 dark:text-cyan-400 font-bold rounded-lg border border-slate-200 dark:border-slate-800 focus:border-cyan-500 focus:outline-none"
+            className="px-3.5 py-2 bg-white dark:bg-slate-900 text-blue-700 dark:text-blue-400 font-semibold text-xs rounded-lg border border-slate-200 dark:border-slate-800 focus:border-blue-500 focus:outline-none"
           >
             {cases.map((c) => (
               <option key={c.id} value={c.id}>
@@ -70,9 +73,9 @@ export const NetworkAnalysis: React.FC = () => {
         </div>
       </div>
 
-      {/* Main Canvas View */}
+      {/* Main Graph View Canvas */}
       {isLoading || !networkData ? (
-        <LoadingSpinner message="Rendering Cytoscape Entity Graph..." />
+        <SkeletonCard />
       ) : (
         <div className="relative">
           <NetworkGraph

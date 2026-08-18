@@ -10,7 +10,7 @@ import {
   FileSpreadsheet,
   ArrowLeft,
   UserCheck,
-  Building,
+  Download,
 } from 'lucide-react';
 import { api } from '../services/api';
 import {
@@ -22,7 +22,8 @@ import {
   IntelligenceFinding,
 } from '../types';
 import { Badge } from '../components/common/Badge';
-import { LoadingSpinner } from '../components/common/LoadingSpinner';
+import { Button } from '../components/common/Button';
+import { SkeletonCard } from '../components/common/SkeletonLoader';
 import { RiskIndicator } from '../components/dashboard/RiskIndicator';
 import { NetworkGraph } from '../components/network/NetworkGraph';
 import { NodeDetailPanel } from '../components/network/NodeDetailPanel';
@@ -78,21 +79,23 @@ export const CaseDetails: React.FC = () => {
   }, [caseId]);
 
   if (isLoading) {
-    return <LoadingSpinner message={`Loading Case Workspace Dossier for ${caseId}...`} />;
+    return (
+      <div className="space-y-6 max-w-5xl mx-auto">
+        <SkeletonCard />
+        <SkeletonCard />
+      </div>
+    );
   }
 
   if (!caseData || !networkData || !riskAssessment) {
     return (
-      <div className="p-8 text-center bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl space-y-4 shadow-md">
+      <div className="p-8 text-center bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl space-y-4 max-w-md mx-auto shadow-md">
         <FolderKanban className="w-12 h-12 text-slate-400 dark:text-slate-500 mx-auto" />
-        <h2 className="text-lg font-mono font-bold text-slate-900 dark:text-slate-100">Case Information Unavailable</h2>
-        <p className="text-sm text-slate-600 dark:text-slate-400">Unable to load case information for {caseId}. Please try again.</p>
-        <button
-          onClick={() => navigate('/cases')}
-          className="px-4 py-2 bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 font-mono text-xs rounded-lg"
-        >
+        <h2 className="font-headline text-lg font-bold text-slate-900 dark:text-slate-100">Case Workspace Unavailable</h2>
+        <p className="text-xs text-slate-500 dark:text-slate-400">Unable to load case information for {caseId}.</p>
+        <Button onClick={() => navigate('/cases')} variant="secondary" size="sm">
           Return to Cases
-        </button>
+        </Button>
       </div>
     );
   }
@@ -100,11 +103,11 @@ export const CaseDetails: React.FC = () => {
   const tabs = [
     { id: 'overview', name: 'Overview', icon: FolderKanban },
     { id: 'network', name: 'Network Graph', icon: Network, badge: `${caseData.nodeCount} Nodes` },
-    { id: 'evidence', name: 'Evidence Dossier', icon: ShieldAlert, badge: `${evidenceList.length} Items` },
+    { id: 'evidence', name: 'Evidence', icon: ShieldAlert, badge: `${evidenceList.length}` },
     { id: 'intelligence', name: 'Intelligence Cell', icon: BrainCircuit },
     { id: 'financial', name: 'Financial Telemetry', icon: Wallet },
     { id: 'timeline', name: 'Timeline', icon: Clock },
-    { id: 'report', name: 'Report Summary', icon: FileSpreadsheet },
+    { id: 'report', name: 'Report Preview', icon: FileSpreadsheet },
   ];
 
   const handleExportPDF = async () => {
@@ -114,9 +117,10 @@ export const CaseDetails: React.FC = () => {
   };
 
   return (
-    <div className="space-y-6 max-w-7xl mx-auto">
+    <div className="space-y-8 max-w-5xl mx-auto font-sans pb-12">
       {/* Workspace Header */}
-      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-4 sm:p-5 shadow-sm dark:shadow-2xl space-y-4 transition-colors duration-200">
+      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-6 shadow-sm space-y-6">
+        {/* Page Title & Action Bar */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 dark:border-slate-800 pb-4">
           <div className="flex items-center space-x-3">
             <button
@@ -128,60 +132,64 @@ export const CaseDetails: React.FC = () => {
             </button>
             <div>
               <div className="flex items-center space-x-2">
-                <span className="text-lg sm:text-xl font-mono font-bold text-cyan-600 dark:text-cyan-400">{caseData.id}</span>
-                <Badge variant={caseData.priority === 'HIGH' ? 'high' : 'medium'}>{caseData.priority}</Badge>
-                <Badge variant="active">{caseData.status}</Badge>
+                <span className="text-xs font-mono text-slate-500 dark:text-slate-400 uppercase tracking-wider">Investigation Workspace</span>
+                <span className="text-slate-400 dark:text-slate-600">•</span>
+                <span className="text-sm font-mono font-bold text-blue-600 dark:text-blue-400">{caseData.id}</span>
               </div>
-              <h1 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100 mt-0.5">{caseData.title}</h1>
+              <h1 className="font-headline text-2xl sm:text-3xl font-bold text-slate-900 dark:text-slate-100 tracking-tight mt-0.5">{caseData.title}</h1>
             </div>
           </div>
 
-          <div className="flex items-center justify-between sm:justify-end space-x-4">
-            <div className="text-left sm:text-right font-mono">
-              <span className="text-[10px] text-slate-400 dark:text-slate-500 uppercase">Backend Threat Score</span>
-              <p className="text-xl sm:text-2xl font-extrabold text-rose-600 dark:text-rose-400 tracking-tight">{caseData.riskScore} / 100</p>
+          {/* Key Quick Badges */}
+          <div className="flex items-center space-x-3">
+            <div className="flex items-center space-x-2">
+              <span className="text-xs text-slate-500 dark:text-slate-400">Subject:</span>
+              <strong className="text-sm text-slate-800 dark:text-slate-100 font-semibold">{caseData.subject}</strong>
             </div>
-            <button
-              onClick={handleExportPDF}
-              className="px-3 sm:px-4 py-2 bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-mono font-bold text-xs rounded-lg transition-colors shadow-[0_0_15px_rgba(6,182,212,0.3)] flex items-center space-x-2"
-            >
-              <FileSpreadsheet className="w-4 h-4" />
-              <span>Export PDF Report</span>
-            </button>
+            <Badge variant="active">{caseData.status}</Badge>
+            <Badge variant={caseData.priority === 'HIGH' ? 'high' : 'medium'}>{caseData.priority}</Badge>
+            <Button variant="primary" size="sm" icon={Download} onClick={handleExportPDF}>
+              Export PDF
+            </Button>
           </div>
         </div>
 
-        {/* Quick Key Metrics Strip */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 text-xs font-mono">
-          <div className="p-2.5 bg-slate-50 dark:bg-slate-950 rounded-lg border border-slate-200 dark:border-slate-800">
-            <span className="text-slate-400 dark:text-slate-500 text-[10px]">TARGET SUBJECT</span>
-            <p className="font-bold text-slate-900 dark:text-slate-100 truncate">{caseData.subject}</p>
-          </div>
-          <div className="p-2.5 bg-slate-50 dark:bg-slate-950 rounded-lg border border-slate-200 dark:border-slate-800">
-            <span className="text-slate-400 dark:text-slate-500 text-[10px]">RESOLVED ALIAS</span>
-            <p className="font-bold text-cyan-700 dark:text-cyan-300 truncate">
-              {caseData.aliases[0]?.name || 'N/A'}
-            </p>
-          </div>
-          <div className="p-2.5 bg-slate-50 dark:bg-slate-950 rounded-lg border border-slate-200 dark:border-slate-800">
-            <span className="text-slate-400 dark:text-slate-500 text-[10px]">PRIMARY WALLET</span>
-            <p className="font-bold text-amber-600 dark:text-amber-400 truncate">Wallet-X</p>
-          </div>
-          <div className="p-2.5 bg-slate-50 dark:bg-slate-950 rounded-lg border border-slate-200 dark:border-slate-800">
-            <span className="text-slate-400 dark:text-slate-500 text-[10px]">GRAPH TOPOLOGY</span>
-            <p className="font-bold text-slate-800 dark:text-slate-200">{caseData.nodeCount} Nodes</p>
-          </div>
-          <div className="p-2.5 bg-slate-50 dark:bg-slate-950 rounded-lg border border-slate-200 dark:border-slate-800">
-            <span className="text-slate-400 dark:text-slate-500 text-[10px]">FORWARD CONNECTIONS</span>
-            <p className="font-bold text-cyan-600 dark:text-cyan-400">{caseData.forwardConnectionsCount} Forward</p>
-          </div>
-          <div className="p-2.5 bg-slate-50 dark:bg-slate-950 rounded-lg border border-slate-200 dark:border-slate-800">
-            <span className="text-slate-400 dark:text-slate-500 text-[10px]">BACKWARD CONNECTIONS</span>
-            <p className="font-bold text-purple-600 dark:text-purple-400">{caseData.backwardConnectionsCount} Backward</p>
+        {/* Investigation Summary Information Grid */}
+        <div className="space-y-2">
+          <h3 className="text-xs font-mono font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+            Investigation Summary
+          </h3>
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 text-xs">
+            <div className="p-3 bg-slate-50 dark:bg-slate-950/60 rounded-lg border border-slate-200 dark:border-slate-800">
+              <span className="text-slate-500 dark:text-slate-400 text-[11px] block">Subject</span>
+              <p className="font-semibold text-slate-800 dark:text-slate-100 truncate mt-0.5">{caseData.subject}</p>
+            </div>
+            <div className="p-3 bg-slate-50 dark:bg-slate-950/60 rounded-lg border border-slate-200 dark:border-slate-800">
+              <span className="text-slate-500 dark:text-slate-400 text-[11px] block">Known Alias</span>
+              <p className="font-semibold text-blue-600 dark:text-blue-400 truncate mt-0.5">
+                {caseData.aliases[0]?.name || 'Wolf_23'}
+              </p>
+            </div>
+            <div className="p-3 bg-slate-50 dark:bg-slate-950/60 rounded-lg border border-slate-200 dark:border-slate-800">
+              <span className="text-slate-500 dark:text-slate-400 text-[11px] block">Connected Wallet</span>
+              <p className="font-semibold text-amber-600 dark:text-amber-400 truncate mt-0.5">Wallet-X</p>
+            </div>
+            <div className="p-3 bg-slate-50 dark:bg-slate-950/60 rounded-lg border border-slate-200 dark:border-slate-800">
+              <span className="text-slate-500 dark:text-slate-400 text-[11px] block">Network Size</span>
+              <p className="font-semibold text-slate-800 dark:text-slate-200 mt-0.5">{caseData.nodeCount} nodes</p>
+            </div>
+            <div className="p-3 bg-slate-50 dark:bg-slate-950/60 rounded-lg border border-slate-200 dark:border-slate-800">
+              <span className="text-slate-500 dark:text-slate-400 text-[11px] block">Forward Connections</span>
+              <p className="font-semibold text-blue-600 dark:text-blue-400 mt-0.5">{caseData.forwardConnectionsCount}</p>
+            </div>
+            <div className="p-3 bg-slate-50 dark:bg-slate-950/60 rounded-lg border border-slate-200 dark:border-slate-800">
+              <span className="text-slate-500 dark:text-slate-400 text-[11px] block">Backward Connections</span>
+              <p className="font-semibold text-purple-600 dark:text-purple-400 mt-0.5">{caseData.backwardConnectionsCount}</p>
+            </div>
           </div>
         </div>
 
-        {/* Tabs Bar */}
+        {/* Navigation Tabs Bar */}
         <div className="flex overflow-x-auto space-x-1 border-b border-slate-200 dark:border-slate-800 pt-2">
           {tabs.map((tab) => {
             const Icon = tab.icon;
@@ -190,16 +198,16 @@ export const CaseDetails: React.FC = () => {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id as WorkspaceTab)}
-                className={`flex items-center space-x-2 px-4 py-2.5 rounded-t-lg text-xs font-mono font-semibold transition-colors border-t border-x whitespace-nowrap ${
+                className={`flex items-center space-x-2 px-4 py-2.5 rounded-t-lg text-xs font-medium transition-colors border-t border-x whitespace-nowrap ${
                   isActive
-                    ? 'bg-slate-50 dark:bg-slate-950 text-cyan-700 dark:text-cyan-400 border-cyan-300 dark:border-cyan-500/40 border-b-slate-50 dark:border-b-slate-950 -mb-px shadow-sm'
-                    : 'bg-slate-100/50 dark:bg-slate-900/50 text-slate-500 dark:text-slate-400 border-transparent hover:text-slate-900 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800/50'
+                    ? 'bg-slate-50 dark:bg-slate-950 text-blue-600 dark:text-blue-400 border-slate-200 dark:border-slate-800 border-b-slate-50 dark:border-b-slate-950 -mb-px shadow-sm font-semibold'
+                    : 'bg-white dark:bg-slate-900/50 text-slate-500 dark:text-slate-400 border-transparent hover:text-slate-900 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800/50'
                 }`}
               >
-                <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-cyan-600 dark:text-cyan-400' : 'text-slate-400'}`} />
+                <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-blue-600 dark:text-blue-400' : 'text-slate-400 dark:text-slate-500'}`} />
                 <span>{tab.name}</span>
                 {tab.badge && (
-                  <span className="px-1.5 py-0.2 bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-[10px] rounded border border-slate-300 dark:border-slate-700">
+                  <span className="px-1.5 py-0.2 bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-[10px] rounded font-mono border border-slate-300 dark:border-slate-700">
                     {tab.badge}
                   </span>
                 )}
@@ -209,63 +217,63 @@ export const CaseDetails: React.FC = () => {
         </div>
       </div>
 
-      {/* Tab Contents */}
+      {/* Tab Panels */}
       <div className="space-y-6">
         {/* OVERVIEW TAB */}
         {activeTab === 'overview' && (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <div className="lg:col-span-2 space-y-6">
-              {/* Summary Dossier */}
-              <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-5 space-y-3 shadow-sm dark:shadow-md">
-                <h3 className="font-mono font-bold text-sm text-slate-900 dark:text-slate-100 uppercase tracking-wider">
-                  Operational Summary Dossier
+              {/* Summary Description */}
+              <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-6 space-y-3 shadow-sm">
+                <h3 className="font-headline text-lg font-bold text-slate-900 dark:text-slate-100">
+                  Case Summary & Background
                 </h3>
-                <p className="text-xs text-slate-700 dark:text-slate-300 leading-relaxed font-sans bg-slate-50 dark:bg-slate-950 p-4 rounded-lg border border-slate-200 dark:border-slate-800">
+                <p className="text-xs text-slate-700 dark:text-slate-300 leading-relaxed font-sans bg-slate-50 dark:bg-slate-950/60 p-4 rounded-lg border border-slate-200 dark:border-slate-800">
                   {caseData.summary}
                 </p>
                 <div className="flex flex-wrap gap-2 pt-1">
                   {caseData.tags.map((tag, idx) => (
-                    <span key={idx} className="px-2.5 py-1 bg-cyan-50 dark:bg-cyan-950/60 text-cyan-700 dark:text-cyan-300 text-xs font-mono rounded border border-cyan-300 dark:border-cyan-500/30">
+                    <span key={idx} className="px-2.5 py-1 bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 text-xs font-mono rounded border border-blue-200 dark:border-blue-800/60">
                       #{tag}
                     </span>
                   ))}
                 </div>
               </div>
 
-              {/* Resolved Aliases & Connected Wallets Cards */}
+              {/* Identified Handles & Wallets Grid */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-5 space-y-3 shadow-sm">
-                  <div className="flex items-center space-x-2 text-xs font-mono text-cyan-700 dark:text-cyan-400 font-bold uppercase">
+                  <div className="flex items-center space-x-2 text-xs text-blue-600 dark:text-blue-400 font-semibold uppercase">
                     <UserCheck className="w-4 h-4" />
-                    <span>Identified Handles & Aliases</span>
+                    <span>Identified Aliases</span>
                   </div>
                   <div className="space-y-2">
                     {caseData.aliases.map((alias, idx) => (
-                      <div key={idx} className="p-3 bg-slate-50 dark:bg-slate-950 rounded-lg border border-slate-200 dark:border-slate-800 flex items-center justify-between text-xs font-mono">
+                      <div key={idx} className="p-3 bg-slate-50 dark:bg-slate-950/60 rounded-lg border border-slate-200 dark:border-slate-800 flex items-center justify-between text-xs">
                         <div>
-                          <p className="font-bold text-slate-900 dark:text-slate-100">{alias.name}</p>
-                          <p className="text-[10px] text-slate-500 dark:text-slate-400">Platform: {alias.platform}</p>
+                          <p className="font-semibold text-slate-800 dark:text-slate-200">{alias.name}</p>
+                          <p className="text-[11px] text-slate-500 dark:text-slate-400">Platform: {alias.platform}</p>
                         </div>
-                        <span className="text-[11px] text-emerald-600 dark:text-emerald-400 font-bold">{alias.confidence}% Match</span>
+                        <span className="text-[11px] text-emerald-600 dark:text-emerald-400 font-mono font-semibold">{alias.confidence}% Match</span>
                       </div>
                     ))}
                   </div>
                 </div>
 
                 <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-5 space-y-3 shadow-sm">
-                  <div className="flex items-center space-x-2 text-xs font-mono text-amber-600 dark:text-amber-400 font-bold uppercase">
+                  <div className="flex items-center space-x-2 text-xs text-amber-600 dark:text-amber-400 font-semibold uppercase">
                     <Wallet className="w-4 h-4" />
-                    <span>Target Financial Wallets</span>
+                    <span>Connected Crypto Wallets</span>
                   </div>
                   <div className="space-y-2">
                     {caseData.wallets.map((wallet, idx) => (
-                      <div key={idx} className="p-3 bg-slate-50 dark:bg-slate-950 rounded-lg border border-slate-200 dark:border-slate-800 space-y-1 text-xs font-mono">
+                      <div key={idx} className="p-3 bg-slate-50 dark:bg-slate-950/60 rounded-lg border border-slate-200 dark:border-slate-800 space-y-1 text-xs">
                         <div className="flex items-center justify-between">
-                          <span className="font-bold text-amber-700 dark:text-amber-300">{wallet.blockchain}</span>
-                          <span className="text-rose-600 dark:text-rose-400 font-bold">{wallet.riskScore}/100 Risk</span>
+                          <span className="font-semibold text-amber-600 dark:text-amber-300">{wallet.blockchain}</span>
+                          <span className="text-rose-600 dark:text-rose-400 font-mono font-semibold">{wallet.riskScore}/100 Risk</span>
                         </div>
-                        <p className="text-[11px] text-slate-700 dark:text-slate-300 truncate">{wallet.address}</p>
-                        <p className="text-[10px] text-slate-500 dark:text-slate-400">Balance: {wallet.balance}</p>
+                        <p className="text-[11px] font-mono text-slate-700 dark:text-slate-300 truncate">{wallet.address}</p>
+                        <p className="text-[11px] text-slate-500 dark:text-slate-400">Balance: {wallet.balance}</p>
                       </div>
                     ))}
                   </div>
@@ -308,20 +316,20 @@ export const CaseDetails: React.FC = () => {
               <div
                 key={ev.id}
                 onClick={() => setSelectedEvidence(ev)}
-                className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-cyan-500/40 rounded-xl p-5 shadow-sm dark:shadow-xl transition-all cursor-pointer space-y-3 flex flex-col justify-between group"
+                className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 rounded-xl p-5 shadow-sm transition-all cursor-pointer space-y-3 flex flex-col justify-between group"
               >
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
-                    <span className="font-mono font-bold text-cyan-600 dark:text-cyan-400 text-sm group-hover:underline">{ev.id}</span>
+                    <span className="font-mono font-bold text-blue-600 dark:text-blue-400 text-sm group-hover:underline">{ev.id}</span>
                     <Badge variant="verified">{ev.status}</Badge>
                   </div>
-                  <h4 className="text-sm font-bold text-slate-900 dark:text-slate-100">{ev.title}</h4>
-                  <p className="text-xs font-mono text-slate-500 dark:text-slate-400">Type: {ev.type}</p>
-                  <p className="text-xs text-slate-600 dark:text-slate-400 line-clamp-2 leading-relaxed font-sans">{ev.details}</p>
+                  <h4 className="font-headline text-base font-bold text-slate-900 dark:text-slate-100">{ev.title}</h4>
+                  <p className="text-xs text-slate-500 dark:text-slate-400">Type: {ev.type}</p>
+                  <p className="text-xs text-slate-600 dark:text-slate-300 line-clamp-2 leading-relaxed font-sans">{ev.details}</p>
                 </div>
-                <div className="pt-3 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between text-[10px] font-mono text-slate-500 dark:text-slate-400">
+                <div className="pt-3 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between text-xs font-mono text-slate-500 dark:text-slate-400">
                   <span className="text-emerald-600 dark:text-emerald-400">{ev.integrityStatus}</span>
-                  <span className="text-cyan-600 dark:text-cyan-400 font-semibold group-hover:underline">View Dossier →</span>
+                  <span className="text-blue-600 dark:text-blue-400 font-semibold group-hover:underline">View Evidence →</span>
                 </div>
               </div>
             ))}
@@ -334,26 +342,26 @@ export const CaseDetails: React.FC = () => {
             {intelFindings.map((finding) => (
               <div
                 key={finding.id}
-                className={`p-5 rounded-xl border space-y-3 shadow-sm ${
+                className={`p-6 rounded-xl border space-y-3 shadow-sm ${
                   finding.isControlled
-                    ? 'bg-white dark:bg-slate-900 border-cyan-300 dark:border-cyan-500/40 shadow-[0_0_15px_rgba(6,182,212,0.1)]'
-                    : 'bg-slate-50 dark:bg-slate-950 border-amber-300 dark:border-amber-500/30'
+                    ? 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800'
+                    : 'bg-slate-50 dark:bg-slate-950 border-amber-300 dark:border-amber-900/40 opacity-90'
                 }`}
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-2">
-                    <span className={`text-xs font-mono font-bold px-2.5 py-1 rounded border ${finding.isControlled ? 'bg-cyan-100 dark:bg-cyan-500/10 text-cyan-800 dark:text-cyan-300 border-cyan-300 dark:border-cyan-500/30' : 'bg-amber-100 dark:bg-amber-500/10 text-amber-800 dark:text-amber-400 border-amber-300 dark:border-amber-500/30'}`}>
-                      {finding.isControlled ? 'CONTROLLED INTELLIGENCE' : 'RAW / RESTRICTED SIGNAL'}
+                    <span className={`text-xs font-mono font-bold px-2.5 py-1 rounded border ${finding.isControlled ? 'bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-950 dark:text-blue-300 dark:border-blue-800/60' : 'bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950 dark:text-amber-300 dark:border-amber-800/60'}`}>
+                      {finding.isControlled ? 'CONTROLLED INTELLIGENCE' : 'RESTRICTED INFORMATION'}
                     </span>
                     <span className="text-xs font-mono text-slate-500 dark:text-slate-400">Confidence: {finding.confidence}%</span>
                   </div>
                   <span className="text-xs font-mono text-slate-500 dark:text-slate-400">{finding.timestamp}</span>
                 </div>
-                <h4 className="text-base font-bold text-slate-900 dark:text-slate-100 font-sans">{finding.finding}</h4>
-                <p className="text-xs text-slate-700 dark:text-slate-300 font-sans">{finding.summary}</p>
-                <div className="flex items-center space-x-4 text-xs font-mono text-slate-500 dark:text-slate-400 pt-2 border-t border-slate-100 dark:border-slate-800">
-                  <span>Entities: {finding.relatedEntities.join(', ')}</span>
-                  <span>Evidence: {finding.evidenceIds.join(', ') || 'None'}</span>
+                <h4 className="font-headline text-lg font-bold text-slate-900 dark:text-slate-100 font-sans">{finding.finding}</h4>
+                <p className="text-xs text-slate-700 dark:text-slate-300 font-sans leading-relaxed">{finding.summary}</p>
+                <div className="flex items-center space-x-4 text-xs font-sans text-slate-500 dark:text-slate-400 pt-2 border-t border-slate-200 dark:border-slate-800">
+                  <span>Related Entities: <strong className="text-slate-800 dark:text-slate-200">{finding.relatedEntities.join(', ')}</strong></span>
+                  <span>Supporting Evidence: <strong className="text-blue-600 dark:text-blue-400 font-mono">{finding.evidenceIds.join(', ') || 'None'}</strong></span>
                 </div>
               </div>
             ))}
@@ -363,27 +371,22 @@ export const CaseDetails: React.FC = () => {
         {/* FINANCIAL TAB */}
         {activeTab === 'financial' && (
           <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-6 space-y-4 shadow-sm">
-            <h3 className="font-mono font-bold text-sm text-slate-900 dark:text-slate-100 uppercase tracking-wider flex items-center space-x-2">
-              <Wallet className="w-4 h-4 text-amber-600 dark:text-amber-400" />
-              <span>Blockchain & Financial Flow Analysis</span>
+            <h3 className="font-headline text-lg font-bold text-slate-900 dark:text-slate-100 flex items-center space-x-2">
+              <Wallet className="w-5 h-5 text-amber-600 dark:text-amber-400" />
+              <span>Financial & Cryptocurrency Telemetry</span>
             </h3>
-            <p className="text-xs text-slate-500 dark:text-slate-400 font-mono">
-              On-chain transaction telemetry provided by Member 3 Graph Engine.
-            </p>
 
-            <div className="space-y-3">
-              <div className="p-4 bg-slate-50 dark:bg-slate-950 rounded-lg border border-slate-200 dark:border-slate-800 flex flex-col md:flex-row md:items-center justify-between gap-4 text-xs font-mono">
-                <div>
-                  <span className="text-slate-400 dark:text-slate-500 text-[10px]">ORIGIN WALLET</span>
-                  <p className="font-bold text-slate-900 dark:text-slate-100">Wallet-X (0x71C7656EC8ab88c098defB751B7401B5f6d8976F)</p>
-                </div>
-                <div className="text-center font-bold text-amber-600 dark:text-amber-400">
-                  → Transfer 14.8 ETH →
-                </div>
-                <div>
-                  <span className="text-slate-400 dark:text-slate-500 text-[10px]">DESTINATION MIXER</span>
-                  <p className="font-bold text-rose-600 dark:text-rose-400">Wallet-Y (0x882A...5512)</p>
-                </div>
+            <div className="p-4 bg-slate-50 dark:bg-slate-950/60 rounded-lg border border-slate-200 dark:border-slate-800 flex flex-col md:flex-row md:items-center justify-between gap-4 text-xs font-mono">
+              <div>
+                <span className="text-slate-500 dark:text-slate-400 text-[10px]">ORIGIN WALLET</span>
+                <p className="font-semibold text-slate-900 dark:text-slate-100 mt-0.5">Wallet-X (0x71C7656EC8ab88c098defB751B7401B5f6d8976F)</p>
+              </div>
+              <div className="text-center font-bold text-amber-600 dark:text-amber-400">
+                → Transfer 14.8 ETH →
+              </div>
+              <div>
+                <span className="text-slate-500 dark:text-slate-400 text-[10px]">DESTINATION MIXER</span>
+                <p className="font-semibold text-rose-600 dark:text-rose-400 mt-0.5">Wallet-Y (0x882A...5512)</p>
               </div>
             </div>
           </div>
@@ -392,31 +395,31 @@ export const CaseDetails: React.FC = () => {
         {/* TIMELINE TAB */}
         {activeTab === 'timeline' && (
           <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-6 space-y-4 shadow-sm">
-            <h3 className="font-mono font-bold text-sm text-slate-900 dark:text-slate-100 uppercase tracking-wider flex items-center space-x-2">
-              <Clock className="w-4 h-4 text-cyan-600 dark:text-cyan-400" />
+            <h3 className="font-headline text-lg font-bold text-slate-900 dark:text-slate-100 flex items-center space-x-2">
+              <Clock className="w-5 h-5 text-blue-600 dark:text-blue-400" />
               <span>Investigation Chronology</span>
             </h3>
 
-            <div className="relative border-l border-slate-200 dark:border-slate-800 ml-4 pl-6 space-y-6 font-mono text-xs">
+            <div className="relative border-l border-slate-200 dark:border-slate-800 ml-4 pl-6 space-y-6 text-xs font-sans">
               <div className="relative">
-                <span className="absolute -left-[31px] top-1.5 w-3.5 h-3.5 rounded-full bg-cyan-500 dark:bg-cyan-400 border-2 border-white dark:border-slate-900" />
-                <span className="text-slate-400 dark:text-slate-500 text-[10px]">2026-02-15 08:44 UTC</span>
+                <span className="absolute -left-[31px] top-1.5 w-3.5 h-3.5 rounded-full bg-blue-500 border-2 border-white dark:border-slate-900" />
+                <span className="text-slate-500 dark:text-slate-400 font-mono text-[11px]">2026-02-15 08:44 UTC</span>
                 <h4 className="font-bold text-slate-900 dark:text-slate-100 mt-0.5">Wallet-X Tumbler Transfer (14.8 ETH)</h4>
-                <p className="text-slate-600 dark:text-slate-400 text-[11px] font-sans">On-chain transaction recorded entering mixer address.</p>
+                <p className="text-slate-500 dark:text-slate-400 text-xs">On-chain transaction recorded entering mixer address.</p>
               </div>
 
               <div className="relative">
-                <span className="absolute -left-[31px] top-1.5 w-3.5 h-3.5 rounded-full bg-purple-500 dark:bg-purple-400 border-2 border-white dark:border-slate-900" />
-                <span className="text-slate-400 dark:text-slate-500 text-[10px]">2026-02-12 14:02 UTC</span>
+                <span className="absolute -left-[31px] top-1.5 w-3.5 h-3.5 rounded-full bg-purple-500 border-2 border-white dark:border-slate-900" />
+                <span className="text-slate-500 dark:text-slate-400 font-mono text-[11px]">2026-02-12 14:02 UTC</span>
                 <h4 className="font-bold text-slate-900 dark:text-slate-100 mt-0.5">Telegram Handle Wolf_23 Resolved</h4>
-                <p className="text-slate-600 dark:text-slate-400 text-[11px] font-sans">Cross-platform match score 96% linked to DarkWolf23.</p>
+                <p className="text-slate-500 dark:text-slate-400 text-xs">Cross-platform match score 96% linked to DarkWolf23.</p>
               </div>
 
               <div className="relative">
-                <span className="absolute -left-[31px] top-1.5 w-3.5 h-3.5 rounded-full bg-amber-500 dark:bg-amber-400 border-2 border-white dark:border-slate-900" />
-                <span className="text-slate-400 dark:text-slate-500 text-[10px]">2026-02-10 10:14 UTC</span>
+                <span className="absolute -left-[31px] top-1.5 w-3.5 h-3.5 rounded-full bg-amber-500 border-2 border-white dark:border-slate-900" />
+                <span className="text-slate-500 dark:text-slate-400 font-mono text-[11px]">2026-02-10 10:14 UTC</span>
                 <h4 className="font-bold text-slate-900 dark:text-slate-100 mt-0.5">Darknet Vendor Listing Discovered</h4>
-                <p className="text-slate-600 dark:text-slate-400 text-[11px] font-sans">Tor Onion listing archive collected by Member 1 NLP engine.</p>
+                <p className="text-slate-500 dark:text-slate-400 text-xs">Tor Onion listing archive collected by NLP engine.</p>
               </div>
             </div>
           </div>
@@ -427,32 +430,28 @@ export const CaseDetails: React.FC = () => {
           <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-6 space-y-6 shadow-sm">
             <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-4">
               <div>
-                <h3 className="font-mono font-bold text-lg text-slate-900 dark:text-slate-100">NARCO-TRACE INVESTIGATION REPORT SUMMARY</h3>
+                <h3 className="font-headline text-xl font-bold text-slate-900 dark:text-slate-100">Investigation Report Summary</h3>
                 <p className="text-xs text-slate-500 dark:text-slate-400 font-mono">Case ID: {caseData.id} // Subject: {caseData.subject}</p>
               </div>
-              <button
-                onClick={handleExportPDF}
-                className="px-4 py-2 bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-mono font-bold text-xs rounded-lg transition-colors shadow-[0_0_15px_rgba(6,182,212,0.3)] flex items-center space-x-2"
-              >
-                <FileSpreadsheet className="w-4 h-4" />
-                <span>Export PDF Report</span>
-              </button>
+              <Button variant="primary" icon={Download} onClick={handleExportPDF}>
+                Export PDF
+              </Button>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs font-mono">
-              <div className="p-4 bg-slate-50 dark:bg-slate-950 rounded-lg border border-slate-200 dark:border-slate-800 space-y-1">
-                <span className="text-slate-400 dark:text-slate-500">SUBJECT TARGET</span>
-                <p className="text-base font-bold text-cyan-600 dark:text-cyan-400">{caseData.subject}</p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+              <div className="p-4 bg-slate-50 dark:bg-slate-950/60 rounded-lg border border-slate-200 dark:border-slate-800 space-y-1">
+                <span className="text-slate-500 dark:text-slate-400 text-[11px] block">SUBJECT TARGET</span>
+                <p className="text-base font-bold text-blue-600 dark:text-blue-400 font-sans">{caseData.subject}</p>
               </div>
-              <div className="p-4 bg-slate-50 dark:bg-slate-950 rounded-lg border border-slate-200 dark:border-slate-800 space-y-1">
-                <span className="text-slate-400 dark:text-slate-500">BACKEND THREAT LEVEL</span>
-                <p className="text-base font-bold text-rose-600 dark:text-rose-400">{caseData.riskScore} / 100 ({caseData.priority})</p>
+              <div className="p-4 bg-slate-50 dark:bg-slate-950/60 rounded-lg border border-slate-200 dark:border-slate-800 space-y-1">
+                <span className="text-slate-500 dark:text-slate-400 text-[11px] block">RISK SCORE</span>
+                <p className="text-base font-bold text-rose-600 dark:text-rose-400 font-mono">{caseData.riskScore} / 100 ({caseData.priority})</p>
               </div>
             </div>
 
             <div className="space-y-2">
-              <h4 className="font-mono font-bold text-xs text-slate-800 dark:text-slate-300 uppercase">Key Tactical Findings</h4>
-              <ul className="list-disc list-inside space-y-1 text-xs text-slate-700 dark:text-slate-300 font-sans bg-slate-50 dark:bg-slate-950 p-4 rounded-lg border border-slate-200 dark:border-slate-800">
+              <h4 className="font-semibold text-xs text-slate-700 dark:text-slate-300 uppercase">Key Findings</h4>
+              <ul className="list-disc list-inside space-y-1.5 text-xs text-slate-700 dark:text-slate-300 font-sans bg-slate-50 dark:bg-slate-950/60 p-4 rounded-lg border border-slate-200 dark:border-slate-800 leading-relaxed">
                 <li>Direct correlation confirmed between Dark Web handle DarkWolf23 and Telegram account Wolf_23 (91% confidence).</li>
                 <li>Primary financial siphon wallet Wallet-X (0x71C7...976F) identified transferring 14.8 ETH into tumbler protocols.</li>
                 <li>Eigenvector graph centrality designates subject node as primary logistical bottleneck for regional distribution.</li>
