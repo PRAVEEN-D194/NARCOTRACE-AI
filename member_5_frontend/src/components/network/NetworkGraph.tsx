@@ -282,9 +282,9 @@ export const NetworkGraph: React.FC<NetworkGraphProps> = ({
   };
 
   return (
-    <div className="relative w-full h-[620px] bg-slate-950 border border-slate-800 rounded-xl overflow-hidden shadow-2xl flex flex-col">
+    <div className="relative w-full h-[620px] bg-slate-900 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden shadow-sm dark:shadow-2xl flex flex-col transition-colors duration-200">
       {/* Network Graph Toolbar */}
-      <div className="p-3 bg-slate-900 border-b border-slate-800 flex flex-wrap items-center justify-between gap-3 relative z-20">
+      <div className="p-3 bg-slate-50 dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 flex flex-wrap items-center justify-between gap-3 relative z-20">
         {/* Trace Buttons */}
         <div className="flex items-center space-x-2">
           <Button

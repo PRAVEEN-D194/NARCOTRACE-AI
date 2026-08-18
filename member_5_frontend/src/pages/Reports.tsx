@@ -46,23 +46,23 @@ export const Reports: React.FC = () => {
   return (
     <div className="space-y-6 max-w-7xl mx-auto">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-slate-800">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-slate-200 dark:border-slate-800">
         <div>
-          <h1 className="text-2xl font-mono font-extrabold text-slate-100 tracking-tight flex items-center space-x-2">
-            <FileSpreadsheet className="w-6 h-6 text-cyan-400" />
+          <h1 className="text-xl sm:text-2xl font-mono font-extrabold text-slate-900 dark:text-slate-100 tracking-tight flex items-center space-x-2">
+            <FileSpreadsheet className="w-6 h-6 text-cyan-600 dark:text-cyan-400" />
             <span>REPORT GENERATION & EXPORT</span>
           </h1>
-          <p className="text-xs text-slate-400 font-mono mt-0.5">
+          <p className="text-xs text-slate-500 dark:text-slate-400 font-mono mt-0.5">
             Automated Executive Investigation Dossier Generator
           </p>
         </div>
 
         {/* Target Case Selector */}
-        <div className="flex items-center space-x-3">
+        <div className="flex flex-wrap items-center gap-3">
           <select
             value={selectedCaseId}
             onChange={(e) => setSelectedCaseId(e.target.value)}
-            className="px-3 py-2 bg-slate-900 text-cyan-400 font-mono font-bold text-xs rounded-lg border border-slate-800 focus:border-cyan-500 focus:outline-none"
+            className="px-3 py-2 bg-white dark:bg-slate-900 text-cyan-700 dark:text-cyan-400 font-mono font-bold text-xs rounded-lg border border-slate-200 dark:border-slate-800 focus:border-cyan-500 focus:outline-none"
           >
             {cases.map((c) => (
               <option key={c.id} value={c.id}>
@@ -80,12 +80,12 @@ export const Reports: React.FC = () => {
       {isGenerating || !report ? (
         <LoadingSpinner message="Compiling Tactical Report Summary..." />
       ) : (
-        <div className="bg-slate-900 border border-slate-800 rounded-xl p-8 shadow-2xl space-y-6 max-w-4xl mx-auto">
+        <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-4 sm:p-8 shadow-sm dark:shadow-2xl space-y-6 max-w-4xl mx-auto transition-colors duration-200">
           {/* Action Bar */}
-          <div className="flex items-center justify-between border-b border-slate-800 pb-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 dark:border-slate-800 pb-4">
             <div className="flex items-center space-x-2">
-              <CheckCircle2 className="w-5 h-5 text-emerald-400" />
-              <span className="font-mono text-xs text-slate-300">Report Ready for Interdiction Review</span>
+              <CheckCircle2 className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
+              <span className="font-mono text-xs text-slate-700 dark:text-slate-300">Report Ready for Interdiction Review</span>
             </div>
             <Button variant="primary" icon={Download} onClick={handleExportPDF}>
               Export PDF Document
@@ -93,28 +93,28 @@ export const Reports: React.FC = () => {
           </div>
 
           {/* Dossier Header */}
-          <div className="p-6 bg-slate-950 rounded-xl border border-cyan-500/30 space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-3 font-mono">
-              <h2 className="text-lg font-bold text-cyan-400">NARCO-TRACE INVESTIGATION REPORT</h2>
-              <span className="text-xs text-amber-400 font-semibold">LAW ENFORCEMENT SENSITIVE</span>
+          <div className="p-4 sm:p-6 bg-slate-50 dark:bg-slate-950 rounded-xl border border-cyan-300 dark:border-cyan-500/30 space-y-4">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-200 dark:border-slate-800 pb-3 font-mono">
+              <h2 className="text-base sm:text-lg font-bold text-cyan-700 dark:text-cyan-400">NARCO-TRACE INVESTIGATION REPORT</h2>
+              <span className="text-xs text-amber-600 dark:text-amber-400 font-semibold">LAW ENFORCEMENT SENSITIVE</span>
             </div>
 
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs font-mono">
               <div>
-                <span className="text-slate-500">CASE ID:</span>
-                <p className="font-bold text-slate-100">{report.caseId}</p>
+                <span className="text-slate-400 dark:text-slate-500">CASE ID:</span>
+                <p className="font-bold text-slate-900 dark:text-slate-100">{report.caseId}</p>
               </div>
               <div>
-                <span className="text-slate-500">SUBJECT:</span>
-                <p className="font-bold text-slate-100">{report.subject}</p>
+                <span className="text-slate-400 dark:text-slate-500">SUBJECT:</span>
+                <p className="font-bold text-slate-900 dark:text-slate-100">{report.subject}</p>
               </div>
               <div>
-                <span className="text-slate-500">RISK SCORE:</span>
-                <p className="font-bold text-rose-400">{report.riskScore}/100 ({report.riskLevel})</p>
+                <span className="text-slate-400 dark:text-slate-500">RISK SCORE:</span>
+                <p className="font-bold text-rose-600 dark:text-rose-400">{report.riskScore}/100 ({report.riskLevel})</p>
               </div>
               <div>
-                <span className="text-slate-500">GENERATED BY:</span>
-                <p className="font-bold text-slate-300">{report.generatedBy}</p>
+                <span className="text-slate-400 dark:text-slate-500">GENERATED BY:</span>
+                <p className="font-bold text-slate-700 dark:text-slate-300">{report.generatedBy}</p>
               </div>
             </div>
           </div>
@@ -122,18 +122,18 @@ export const Reports: React.FC = () => {
           {/* Sections */}
           <div className="space-y-4 font-sans text-xs">
             <div className="space-y-1.5">
-              <h3 className="font-mono font-bold text-slate-200 uppercase text-xs">1. Executive Summary</h3>
-              <p className="p-4 bg-slate-950/80 text-slate-300 rounded-lg border border-slate-800 leading-relaxed font-sans">
+              <h3 className="font-mono font-bold text-slate-800 dark:text-slate-200 uppercase text-xs">1. Executive Summary</h3>
+              <p className="p-4 bg-slate-50 dark:bg-slate-950/80 text-slate-700 dark:text-slate-300 rounded-lg border border-slate-200 dark:border-slate-800 leading-relaxed font-sans">
                 {report.summary}
               </p>
             </div>
 
             <div className="space-y-1.5">
-              <h3 className="font-mono font-bold text-slate-200 uppercase text-xs">2. Key Findings & Cross-Correlations</h3>
-              <div className="p-4 bg-slate-950/80 text-slate-300 rounded-lg border border-slate-800 space-y-2">
+              <h3 className="font-mono font-bold text-slate-800 dark:text-slate-200 uppercase text-xs">2. Key Findings & Cross-Correlations</h3>
+              <div className="p-4 bg-slate-50 dark:bg-slate-950/80 text-slate-700 dark:text-slate-300 rounded-lg border border-slate-200 dark:border-slate-800 space-y-2">
                 {report.keyFindings.map((f, i) => (
                   <p key={i} className="flex items-start space-x-2">
-                    <span className="text-cyan-400 font-bold font-mono">•</span>
+                    <span className="text-cyan-600 dark:text-cyan-400 font-bold font-mono">•</span>
                     <span>{f}</span>
                   </p>
                 ))}
@@ -141,18 +141,18 @@ export const Reports: React.FC = () => {
             </div>
 
             <div className="space-y-1.5">
-              <h3 className="font-mono font-bold text-slate-200 uppercase text-xs">3. Graph Topology Summary</h3>
-              <p className="p-4 bg-slate-950/80 text-slate-300 rounded-lg border border-slate-800 leading-relaxed font-mono">
+              <h3 className="font-mono font-bold text-slate-800 dark:text-slate-200 uppercase text-xs">3. Graph Topology Summary</h3>
+              <p className="p-4 bg-slate-50 dark:bg-slate-950/80 text-slate-700 dark:text-slate-300 rounded-lg border border-slate-200 dark:border-slate-800 leading-relaxed font-mono">
                 {report.networkSummary} ({report.forwardCount} forward connections, {report.backwardCount} backward connections).
               </p>
             </div>
 
             <div className="space-y-1.5">
-              <h3 className="font-mono font-bold text-slate-200 uppercase text-xs">4. Interdiction Recommendations</h3>
-              <div className="p-4 bg-slate-950/80 text-slate-300 rounded-lg border border-slate-800 space-y-2 font-mono">
+              <h3 className="font-mono font-bold text-slate-800 dark:text-slate-200 uppercase text-xs">4. Interdiction Recommendations</h3>
+              <div className="p-4 bg-slate-50 dark:bg-slate-950/80 text-slate-700 dark:text-slate-300 rounded-lg border border-slate-200 dark:border-slate-800 space-y-2 font-mono">
                 {report.recommendations.map((r, i) => (
-                  <p key={i} className="text-cyan-300 flex items-start space-x-2">
-                    <span className="text-amber-400 font-bold">[ACTION]</span>
+                  <p key={i} className="text-cyan-700 dark:text-cyan-300 flex items-start space-x-2">
+                    <span className="text-amber-600 dark:text-amber-400 font-bold">[ACTION]</span>
                     <span>{r}</span>
                   </p>
                 ))}
